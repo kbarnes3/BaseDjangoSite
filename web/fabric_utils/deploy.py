@@ -1,6 +1,9 @@
 from fabric.api import cd, run, settings, sudo
 
 configurations = {
+    'daily': {
+        'branch': 'master',
+    },
     'dev': {
         'branch': 'master',
     },
