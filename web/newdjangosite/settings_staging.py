@@ -1,7 +1,5 @@
 from settings_base import *
 
-#Settings for running a local development server using runserver
-
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 

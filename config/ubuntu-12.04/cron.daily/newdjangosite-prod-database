@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo 'VACUUM ANALYZE;' | psql newdjangosite-prod
+/var/www/python/newdjangosite-prod/venv/bin/python /var/www/python/newdjangosite-prod/web/manage_prod.py clearsessions
+

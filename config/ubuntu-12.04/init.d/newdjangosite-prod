@@ -1,0 +1,51 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          newdjangosite-prod
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the newdjangosite prod FastCGI server
+# Description:       starts newdjangosite-prod
+### END INIT INFO
+
+NAME=newdjangosite-prod
+VIRTUALPYTHON="/var/www/python/newdjangosite-prod/venv/bin/python"
+MANAGEFILE="/var/www/python/newdjangosite-prod/web/manage_prod.py"
+PIDFILE="/var/fastcgi/newdjangosite-prod.pid"
+SOCKFILE="/var/fastcgi/newdjangosite-prod.sock"
+
+start() {
+    exec sudo -u www-data $VIRTUALPYTHON $MANAGEFILE runfcgi socket=$SOCKFILE pidfile=$PIDFILE maxrequests=100 maxchildren=4
+    return 0
+}
+
+stop() {
+    if [ -f $PIDFILE ]; then
+        kill `cat -- $PIDFILE`
+        rm -f -- $PIDFILE
+    fi
+    return 0
+}
+
+case "$1" in
+  start)
+	echo "Starting $NAME"
+	start
+	;;
+  stop)
+	echo "Stopping $NAME"
+	stop
+	;;
+  restart)
+	echo "Restarting $NAME"
+	stop
+	start
+	;;
+  *)
+	echo "Usage: $NAME {start|stop|restart}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

@@ -4,9 +4,12 @@ configurations = {
     'dev': {
         'branch': 'master',
     },
+    'prod': {
+        'branch': 'prod',
+    },
     'staging': {
-        'branch': 'master',
-    }
+        'branch': 'prod',
+    },
 }
 
 

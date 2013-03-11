@@ -1,0 +1,33 @@
+server {
+	listen   80;
+	server_name  www.newdjangosite.com;
+
+	access_log  /var/log/nginx/localhost.access.log;
+
+	location / {
+		rewrite ^(.*) http://newdjangosite.com$1;
+	}
+}
+
+server {
+	listen   80 default;
+	server_name  newdjangosite.com;
+
+	access_log  /var/log/nginx/localhost.access.log;
+
+	location / {
+		fastcgi_pass unix:/var/fastcgi/newdjangosite-prod.sock;
+		fastcgi_param PATH_INFO $fastcgi_script_name;
+		fastcgi_param REQUEST_METHOD $request_method;
+		fastcgi_param QUERY_STRING $query_string;
+		fastcgi_param CONTENT_TYPE $content_type;
+		fastcgi_param CONTENT_LENGTH $content_length;
+		fastcgi_pass_header Authorization;
+		fastcgi_intercept_errors off;
+	}
+
+	location /static/ {
+		root   /var/www/newdjangosite-prod;
+	}
+}
+
