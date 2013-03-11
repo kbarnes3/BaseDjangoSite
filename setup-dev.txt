@@ -1,0 +1,17 @@
+To set up a local development environment:
+
+1. Install all the required tools. This includes:
+    a. Python 2.7.3 (http://www.python.org/download/releases/2.7.3/)
+    b. Virtualenv 1.9.1 (https://pypi.python.org/pypi/virtualenv)
+    c. Mercurial (http://mercurial.selenic.com/downloads/)
+2. Create a Virtualenv and populate it. In the root of the repo run:
+    a. virtualenv venv
+    b. venv\Scripts\activate.bat
+    c. pip install --requirement=requirements.txt
+    d. pip install --requirement=dev-requirements.txt
+3. Set up the local database. From the /web directory run:
+    a. python manage.py syncdb
+    b. python manage.py migrate
+    c. python manage.py createsuperuser
+4. Run the site using 'python manage.py runserver'
+
