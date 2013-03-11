@@ -1,0 +1,9 @@
+# Generated Python files
+*.pyc
+
+# Files we produce while running
+*.db
+/venv
+
+#PyCharm files
+.idea

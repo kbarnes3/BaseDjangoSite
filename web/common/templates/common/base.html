@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <title>{% block title %}newdjangosite{% endblock %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 1140px Grid styles for IE -->
+    <!--[if lte IE 9]><link rel="stylesheet" href="/static/common/css/ie.css" type="text/css" media="screen" /><![endif]-->
+
+    <!-- The 1140px Grid - http://cssgrid.net/ -->
+    <link rel="stylesheet" href="/static/common/css/1140.css" type="text/css" media="screen" />
+
+    <link rel="stylesheet" href="/static/common/css/styles.css" type="text/css" media="screen" />
+
+    <!--css3-mediaqueries-js - http://code.google.com/p/css3-mediaqueries-js/ -->
+    <script type="text/javascript" src="/static/common/js/css3-mediaqueries.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+    <div class="container header">
+        <div class="row">
+            <div class="twelvecol last">
+                <h1><a href="/">newdjangosite</a></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="user twelvecol last">
+                {% if user.is_authenticated %}
+                Hello {{ user.get_short_name }}! <a href="/users/logout">Logout</a>
+                {% else %}
+                <a href="/users/login">Login</a> <a href="/users/signup">Sign up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container main">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="container footer">
+        <div class="row">
+            <div class="twelvecol last">
+                &copy; 2013 Kevin Barnes
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
