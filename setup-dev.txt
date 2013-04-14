@@ -9,9 +9,10 @@ To set up a local development environment:
     b. venv\Scripts\activate.bat
     c. pip install --requirement=requirements.txt
     d. pip install --requirement=dev-requirements.txt
-3. Set up the local database. From the /web directory run:
+3. If needed, run 'python secret_key.py' from the root of the repo to generate a secret key and set the SECRET_KEY setting in web/newdjangosite/settings_base.py to be the output of the previous command
+4. Set up the local database. From the /web directory run:
     a. python manage.py syncdb
     b. python manage.py migrate
     c. python manage.py createsuperuser
-4. Run the site using 'python manage.py runserver'
+5. Run the site using 'python manage.py runserver'
 
