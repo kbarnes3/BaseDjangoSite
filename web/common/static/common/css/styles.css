@@ -12,12 +12,13 @@ body {
 }
 
 .footer {
-    margin: 0px 10px 0px 10px;
-    padding: 20px 0px 20px 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .header {
-    margin: 0px 10px 0px 10px;
+    background-color: #000000;
+    color: #FFFFFF;
 }
 
 .header h1 {
@@ -25,21 +26,46 @@ body {
     text-align: right;
 }
 
-.main
-{
-    margin: 0px 10px 5px 10px;
-    padding: 10px 0px 100px 10px;
+.header h1 a:link, .header h1 a:visited {
+    color: #FFFFFF;
+    text-decoration: none;
 }
 
-.song {
-    border-color: #000000;
-    border-style: solid;
-    border-width: 1px;
+.header h1 a:hover, .header h1 a:active {
+    color: #CCCCCC;
+    text-decoration: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.hideondesktop {
+    display: none;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.main
+{
+    margin-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 100px;
 }
 
 .user {
     padding: 0px 0px 10px 0px;
     text-align: right;
+}
+
+.user a:link, .user a:visited {
+    color: #FFFFFF;
+}
+
+.user a:hover, .user a:active {
+    color: #CCCCCC;
 }
 
 /* ============================= */
@@ -50,6 +76,10 @@ body {
 
     body {
 
+    }
+
+    .hideondesktop {
+        display: inline;
     }
 
 }
