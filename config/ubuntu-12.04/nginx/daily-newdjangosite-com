@@ -11,6 +11,7 @@ server {
 		fastcgi_param QUERY_STRING $query_string;
 		fastcgi_param CONTENT_TYPE $content_type;
 		fastcgi_param CONTENT_LENGTH $content_length;
+		fastcgi_param HTTPS $https;
 		fastcgi_pass_header Authorization;
 		fastcgi_intercept_errors off;
 	}
