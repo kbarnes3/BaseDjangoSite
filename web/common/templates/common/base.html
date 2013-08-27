@@ -1,52 +1,59 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-    <title>{% block title %}newdjangosite{% endblock %}</title>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}newdjangosite{% endblock %}</title>
 
-    <!-- 1140px Grid styles for IE -->
-    <!--[if lte IE 9]><link rel="stylesheet" href="/static/common/css/ie.css" type="text/css" media="screen" /><![endif]-->
+        <!-- Bootstrap core CSS -->
+        <link href="/static/common/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- The 1140px Grid - http://cssgrid.net/ -->
-    <link rel="stylesheet" href="/static/common/css/1140.css" type="text/css" media="screen" />
+        <!-- Custom styles for this template -->
+        <link href="/static/common/css/styles.css" rel="stylesheet">
+    </head>
 
-    <link rel="stylesheet" href="/static/common/css/styles.css" type="text/css" media="screen" />
+    <body>
 
-    <!--css3-mediaqueries-js - http://code.google.com/p/css3-mediaqueries-js/ -->
-    <script type="text/javascript" src="/static/common/js/css3-mediaqueries.js"></script>
-    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
-</head>
-<body>
-    <div class="container header">
-        <div class="row">
-            <div class="twelvecol last">
-                <h1><a href="/">newdjangosite</a></h1>
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">newdjangosite</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    {% if user.is_authenticated %}
+                        <p class="navbar-text pull-right">
+                            Hello {{ user.get_short_name }}! <a class="navbar-link" href="/users/logout">Logout</a>
+                        </p>
+                    {% else %}
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/users/login">Login</a></li>
+                            <li><a href="/users/signup">Sign up</a></li>
+                        </ul>
+                    {% endif %}
+                </div><!--/.nav-collapse -->
             </div>
         </div>
-        <div class="row">
-            <div class="user twelvecol last">
-                {% if user.is_authenticated %}
-                Hello {{ user.get_short_name }}! <a href="/users/logout">Logout</a>
-                {% else %}
-                <a href="/users/login">Login</a> <a href="/users/signup">Sign up</a>
-                {% endif %}
+
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div> <!-- /container -->
+
+        <footer class="footer" role="contentinfo">
+            <div class="container">
+                <p>&copy; 2013 Kevin Barnes</p>
             </div>
-        </div>
-    </div>
-
-    <div class="container main">
-        {% block content %}{% endblock %}
-    </div>
-
-    <div class="container footer">
-        <div class="row">
-            <div class="twelvecol last">
-                &copy; 2013 Kevin Barnes
-            </div>
-        </div>
-    </div>
-
-</body>
+        </footer>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+        <script src="/static/common/js/bootstrap.min.js"></script>
+        {%  block includes %}
+        {% endblock %}
+    </body>
 </html>
+
