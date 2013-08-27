@@ -1,2 +1,2 @@
-Fabric==1.6
+Fabric==1.7
 

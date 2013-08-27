@@ -2,8 +2,11 @@ To set up a local development environment:
 
 1. Install all the required tools. This includes:
     a. Python 2.7.3 (http://www.python.org/download/releases/2.7.3/)
-    b. Virtualenv 1.9.1 (https://pypi.python.org/pypi/virtualenv)
-    c. Mercurial (http://mercurial.selenic.com/downloads/)
+    b. Setuptools 1.1 (https://pypi.python.org/pypi/setuptools/1.1)
+    c. Pip 1.4.1 (https://pypi.python.org/pypi/pip)
+    d. Virtualenv 1.10.1 (https://pypi.python.org/pypi/virtualenv)
+    e. Git (http://git-scm.com/downloads)
+    f. Mercurial (http://mercurial.selenic.com/downloads/)
 2. Create a Virtualenv and populate it. In the root of the repo run:
     a. virtualenv venv
     b. venv\Scripts\activate.bat
