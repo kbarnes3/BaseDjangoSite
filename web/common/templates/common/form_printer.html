@@ -1,0 +1,15 @@
+{%  load widget_tweaks %}
+{% for field in form %}
+    <div class="form-group {% if field.errors %} has-error {% endif %}">
+        {% for error in field.errors %}
+            <p class="alert alert-danger">{{ error | escape }}</p>
+        {% endfor %}
+        <label for="id_{{  field.html_name }}" class="control-label">{{ field.label }}</label>
+        {% if field.html_name == "primary_email" %}
+            {% render_field field type="email" class+=" form-control" %}
+        {% else %}
+            {% render_field field class+=" form-control" %}
+        {% endif %}
+    </div>
+{% endfor %}
+
