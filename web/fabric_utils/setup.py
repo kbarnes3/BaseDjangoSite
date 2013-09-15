@@ -15,7 +15,6 @@ def setup_server():
     ]
 
     for package in packages:
-        pass
         sudo('apt-get install --yes {0}'.format(package))
 
     username = run('echo $USER')
