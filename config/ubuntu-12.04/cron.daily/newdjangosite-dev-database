@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo 'VACUUM ANALYZE;' | psql newdjangosite-dev
+echo 'VACUUM ANALYZE;' | psql newdjangosite_dev
 /var/www/python/newdjangosite-dev/venv/bin/python /var/www/python/newdjangosite-dev/web/manage_dev.py clearsessions
 
