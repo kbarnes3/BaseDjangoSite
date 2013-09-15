@@ -90,3 +90,32 @@ def _reload_code(config, init_dir, nginx_dir):
 def _run_tests(config, web_dir, virtualenv_python):
     with cd(web_dir):
         run('{0} manage_{1}.py test'.format(virtualenv_python, config))
+
+
+def deploy_global_config(config):
+    global_dir = '/var/www/python/newdjangosite-{0}/config/ubuntu-12.04/global'.format(config)
+    SHARED_MEM = '/etc/sysctl.d/30-postgresql-shm.conf'
+    NGINX_CONF = '/etc/nginx/nginx.conf'
+    POSTGRES_HBA = '/etc/postgresql/9.1/main/pg_hba.conf'
+    POSTGRES_CONF = '/etc/postgresql/9.1/main/postgresql.conf'
+
+    with cd(global_dir):
+        sudo('cp 30-postgresql-shm.conf {0}'.format(SHARED_MEM))
+        _update_permissions(SHARED_MEM, 'root', 'root', '644')
+
+        sudo('cp nginx.conf {0}'.format(NGINX_CONF))
+        _update_permissions(NGINX_CONF, 'root', 'root', '644')
+
+        sudo('cp pg_hba.conf {0}'.format(POSTGRES_HBA))
+        _update_permissions(POSTGRES_HBA, 'postgres', 'postgres', '640')
+
+        sudo('cp postgresql.conf {0}'.format(POSTGRES_CONF))
+        _update_permissions(POSTGRES_HBA, 'postgres', 'postgres', '644')
+
+    sudo('/etc/init.d/nginx restart')
+    sudo('/etc/init.d/postgresql restart')
+
+
+def _update_permissions(path, owner, group, mode):
+    sudo('chown {0}:{1} {2}'.format(owner, group, path))
+    sudo('chmod {0} {1}'.format(mode, path))
