@@ -3,35 +3,15 @@ To set up a newdjangosite server from a fresh Ubuntu Server 12.04 LTS installati
 1. Run 'sudo apt-get update'
 2. Run 'sudo apt-get upgrade'
 3. Install any held back updates using 'sudo aptitude'
-4. Install all required packages using 'sudo apt-get install _package_':
-    a. openssh-server
-    b. git
-    c. python-virtualenv
-    d. mercurial
-    e. python-psycopg2
-    f. postgresql
-    g. python-flup
-    h. nginx
-5. Run 'sudo addgroup webadmin'
-6. Run 'sudo adduser _user_ webadmin'
-7. Log out and log back in for the new group membership to take effect
-8. Run 'sudo mkdir /var/www' and 'sudo mkdir /var/www/python'
-9. Run 'sudo chgrp -R webadmin /var/www' and 'sudo chmod -R ug+w /var/www'
-10. Run 'ssh-keygen -C _email_' and register ~/.ssh/id_rsa.pub with GitHub
-11. Run 'sudo -u postgres createuser -P _user_' and make yourself a superuser when prompted
-12. Run 'createuser root' and make it a superuser when prompted
-13. Run 'sudo mkdir /var/fastcgi'
-14. Run 'sudo chmod 777 /var/fastcgi'
-14. Run 'sudo rm /etc/nginx/sites-enabled/default'
-15. Run 'sudo /etc/init.d/nginx start'
+4. Install the OpenSSH server using 'sudo apt-get install openssh-server'
+5. Run 'ssh-keygen -C _email_' and register ~/.ssh/id_rsa.pub with GitHub
+6. In the /web directory in a local dev environment, run 'fab setup_server'
+7. When prompted for a host string, enter one in the form of '_user_@_host_'
+8. When prompted to "enter password for new role", enter a password to remotely access PostgreSQL
 
 To set up a new deployment on a properly configured (see above) newdjangosite server:
-1. Consider updating the username and password found in /web/newdjangosite/settings__deployment_.py and committing it.
-2. Run 'createdb --encoding=UTF8 --locale=en_US.UTF-8 --owner=postgres --template=template0 newdjangosite-_deployment_'
-3. Run 'createuser -P _dbuser_' and make it not a superuser but allow it to create databases
-4. From /var/www/python/ run 'git clone _git@github.com:user/repo.git_ newdjangosite-_deployment_'
-5. In the newly created repo, run 'virtualenv --system-site-packages venv'
-6. In the /web directory in a local dev environment, run 'fab deploy:_deployment_'
-7. When prompted for a host string, enter one in the form of '_user_@_host_'
-8. From /var/www/python/newdjangosite-_deployment_, run 'venv/bin/python web/manage__deployment_.py createsuperuser
+1. Consider updating the username and password found in /web/newdjangosite/settings__deployment_.py and committing/pushing it. Note that the Fabric script won't work with passwords containing shell escape characters.
+2. In the /web directory in a local dev environment, run 'fab setup_deployment:_deployment_,"_git@github.com:user/repo.git_"'
+3. When prompted for a host string, enter one in the form of '_user_@_host_'
+4. When prompted for a primary email and subsequent fields, enter the information for the Django superuser to create
 
