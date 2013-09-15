@@ -4,5 +4,5 @@ Use this variables.less file to generate a modified bootstrap.min.css as needed.
 2. Follow the directions in the included README.md to build a clean copy of Bootstrap
 3. Copy the variables.less file from this repo to the less directory of Bootstrap
 4. Make the necessary changes and build a modified version of bootstrap.min.css
-5. Copy both bootstrap.min.css and variables.less back to the newdjangosite repo
+5. Copy both bootstrap.min.css and variables.less back to the newdjangosite repo. Make sure to update the css file in /config/shutdown if appropriate
 
