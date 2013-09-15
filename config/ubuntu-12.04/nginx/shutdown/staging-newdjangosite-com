@@ -8,6 +8,6 @@ server {
 		root /var/www/python/newdjangosite-staging/config/shutdown;
 	}
 
-	error_page 404 /index.html
+	error_page 404 /index.html;
 }
 

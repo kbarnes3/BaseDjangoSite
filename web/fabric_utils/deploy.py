@@ -29,14 +29,16 @@ def deploy(config):
     nginx_dir = '{0}/nginx'.format(config_dir)
     virtualenv_python = '{0}/venv/bin/python'.format(repo_dir)
 
-    _update_source(config, repo_dir, web_dir, virtualenv_python, branch)
+    _update_source(repo_dir, branch)
+    _compile_source(config, repo_dir, web_dir, virtualenv_python)
     _update_scripts(config, daily_scripts_dir)
     _update_database(config, web_dir, virtualenv_python)
-    _reload_code(config, init_dir, nginx_dir)
+    _reload_code(config, init_dir)
+    _reload_web(config, nginx_dir)
     _run_tests(config, web_dir, virtualenv_python)
 
 
-def _update_source(config, repo_dir, web_dir, virtualenv_python, branch):
+def _update_source(repo_dir, branch):
     with cd(repo_dir):
         sudo('chgrp -R webadmin .')
         sudo('chmod -R ug+w .')
@@ -51,6 +53,10 @@ def _update_source(config, repo_dir, web_dir, virtualenv_python, branch):
             sudo('git checkout {0}'.format(branch))
 
         sudo('git reset --hard origin/{0}'.format(branch))
+
+
+def _compile_source(config, repo_dir, web_dir, virtualenv_python):
+    with cd(repo_dir):
         sudo('venv/bin/pip install --requirement=requirements.txt')
 
     with cd(web_dir):
@@ -74,7 +80,7 @@ def _update_database(config, web_dir, virtualenv_python):
         sudo('{0} manage_{1}.py migrate'.format(virtualenv_python, config))
 
 
-def _reload_code(config, init_dir, nginx_dir):
+def _reload_code(config, init_dir):
     with cd(init_dir):
         sudo('cp newdjangosite-{0} /etc/init.d'.format(config))
         sudo('chmod 755 /etc/init.d/newdjangosite-{0}'.format(config))
@@ -82,6 +88,7 @@ def _reload_code(config, init_dir, nginx_dir):
         sudo('update-rc.d newdjangosite-{0} enable'.format(config))
         sudo('/etc/init.d/newdjangosite-{0} restart'.format(config))
 
+def _reload_web(config, nginx_dir):
     with cd(nginx_dir):
         sudo('cp {0}-newdjangosite-com /etc/nginx/sites-enabled/'.format(config))
         sudo('/etc/init.d/nginx reload')
@@ -119,3 +126,15 @@ def deploy_global_config(config):
 def _update_permissions(path, owner, group, mode):
     sudo('chown {0}:{1} {2}'.format(owner, group, path))
     sudo('chmod {0} {1}'.format(mode, path))
+
+
+def shutdown(config):
+    configuration = configurations[config]
+    branch = configuration['branch']
+
+    PYTHON_DIR = '/var/www/python'
+    repo_dir = '{0}/newdjangosite-{1}'.format(PYTHON_DIR, config)
+    nginx_dir = '{0}/config/ubuntu-12.04/nginx/shutdown'.format(repo_dir)
+
+    _update_source(repo_dir, branch)
+    _reload_web(config, nginx_dir)
