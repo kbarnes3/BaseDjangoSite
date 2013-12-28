@@ -1,13 +1,12 @@
 To set up a newdjangosite server from a fresh Ubuntu Server 12.04 LTS installation:
 
 1. Run 'sudo apt-get update'
-2. Run 'sudo apt-get upgrade'
-3. Install any held back updates using 'sudo aptitude'
-4. Install the OpenSSH server using 'sudo apt-get install openssh-server'
-5. Run 'ssh-keygen -C _email_' and register ~/.ssh/id_rsa.pub with GitHub
-6. In the /web directory in a local dev environment, run 'fab setup_server'
-7. When prompted for a host string, enter one in the form of '_user_@_host_'
-8. When prompted to "enter password for new role", enter a password to remotely access PostgreSQL
+2. Run 'sudo apt-get dist-upgrade'
+3. Install the OpenSSH server using 'sudo apt-get install openssh-server'
+4. Run 'ssh-keygen -C _email_' and register ~/.ssh/id_rsa.pub with GitHub
+5. In the /web directory in a local dev environment, run 'fab setup_server'
+6. When prompted for a host string, enter one in the form of '_user_@_host_'
+7. When prompted to "enter password for new role", enter a password to remotely access PostgreSQL
 
 To set up a new deployment on a properly configured (see above) newdjangosite server:
 1. Consider updating the username and password found in /web/newdjangosite/settings__deployment_.py and committing/pushing it. Note that the Fabric script won't work with passwords containing shell escape characters.
@@ -15,7 +14,7 @@ To set up a new deployment on a properly configured (see above) newdjangosite se
 3. When prompted for a host string, enter one in the form of '_user_@_host_'
 4. When prompted for a primary email and subsequent fields, enter the information for the Django superuser to create
 5. To deploy changes in the future, after committing/pushing run 'fab deploy:_deployment_'
-6. If this is the first deployment on a server, consider running updating the global configurations for the server. To do so:
+6. If this is the first deployment on a server, consider updating the global configurations for the server. To do so:
     1. Update the files in /config/ubuntu-12.04/global. Look for the 'newdjangosite' prompts for commonly changed values
     2. After updating, commit/push your changes and run fab deploy
     3. Run 'fab deploy_global_config:_deployment_'
