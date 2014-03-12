@@ -1,5 +1,9 @@
 ﻿body {
-    padding-top: 70px;
+    padding-top: 50px;
+}
+
+.main-container {
+    padding-top: 20px;
 }
 
 .footer {
@@ -19,4 +23,10 @@
         margin-bottom: 0;
     }
 }
+
+@-webkit-viewport   { width: device-width; }
+@-moz-viewport      { width: device-width; }
+@-ms-viewport       { width: device-width; }
+@-o-viewport        { width: device-width; }
+@viewport           { width: device-width; }
 
