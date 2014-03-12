@@ -1,6 +1,6 @@
-Use this variables.less file to generate a modified bootstrap.min.css as needed. This file should only be used with Bootstrap version 3.0.0.
+Use this variables.less file to generate a modified bootstrap.min.css as needed. This file should only be used with Bootstrap version 3.1.0.
 
-1. Download the source for version 3.0.0 of Bootstrap or clone their repo and check out tag v3.0.0
+1. Download the source for version 3.1.0 of Bootstrap or clone their repo and check out tag v3.1.0
 2. Follow the directions in the included README.md to build a clean copy of Bootstrap
 3. Copy the variables.less file from this repo to the less directory of Bootstrap
 4. Make the necessary changes and build a modified version of bootstrap.min.css
