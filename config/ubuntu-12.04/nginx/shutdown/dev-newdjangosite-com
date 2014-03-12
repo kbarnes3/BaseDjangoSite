@@ -11,3 +11,19 @@ server {
 	error_page 404 /index.html;
 }
 
+#server {
+#	listen 443;
+#	server_name  dev.newdjangosite.com;
+#	ssl on;
+#	ssl_certificate /etc/nginx/ssl/dev.newdjangosite.com.crt;
+#	ssl_certificate_key /etc/nginx/ssl/dev.newdjangosite.com.key;
+#
+#	access_log  /var/log/nginx/localhost.access.log;
+#
+#	location / {
+#		root /var/www/python/newdjangosite-dev/config/shutdown;
+#	}
+#
+#	error_page 404 /index.html;
+#}
+

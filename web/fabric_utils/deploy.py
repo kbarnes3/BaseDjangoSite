@@ -91,6 +91,10 @@ def _reload_code(config, init_dir):
 def _reload_web(config, nginx_dir):
     with cd(nginx_dir):
         sudo('cp {0}-newdjangosite-com /etc/nginx/sites-enabled/'.format(config))
+        #sudo('cp ssl/{0}.newdjangosite.com.* /etc/nginx/ssl'.format(config))
+        #sudo('chown root /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
+        #sudo('chgrp root /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
+        #sudo('chmod 644 /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
         sudo('/etc/init.d/nginx reload')
 
 

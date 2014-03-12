@@ -11,3 +11,19 @@ server {
 	error_page 404 /index.html;
 }
 
+#server {
+#	listen 443;
+#	server_name  staging.newdjangosite.com;
+#	ssl on;
+#	ssl_certificate /etc/nginx/ssl/staging.newdjangosite.com.crt;
+#	ssl_certificate_key /etc/nginx/ssl/staging.newdjangosite.com.key;
+#
+#	access_log  /var/log/nginx/localhost.access.log;
+#
+#	location / {
+#		root /var/www/python/newdjangosite-staging/config/shutdown;
+#	}
+#
+#	error_page 404 /index.html;
+#}
+
