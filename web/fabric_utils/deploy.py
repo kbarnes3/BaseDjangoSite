@@ -3,15 +3,19 @@ from fabric.api import cd, run, settings, sudo
 configurations = {
     'daily': {
         'branch': 'master',
+        'ssl': False,
     },
     'dev': {
         'branch': 'master',
+        'ssl': False,
     },
     'prod': {
         'branch': 'prod',
+        'ssl': False,
     },
     'staging': {
         'branch': 'prod',
+        'ssl': False,
     },
 }
 
@@ -19,6 +23,7 @@ configurations = {
 def deploy(config):
     configuration = configurations[config]
     branch = configuration['branch']
+    use_ssl = configuration['ssl']
 
     PYTHON_DIR = '/var/www/python'
     repo_dir = '{0}/newdjangosite-{1}'.format(PYTHON_DIR, config)
@@ -34,7 +39,7 @@ def deploy(config):
     _update_scripts(config, daily_scripts_dir)
     _update_database(config, web_dir, virtualenv_python)
     _reload_code(config, init_dir)
-    _reload_web(config, nginx_dir)
+    _reload_web(config, nginx_dir, use_ssl)
     _run_tests(config, web_dir, virtualenv_python)
 
 
@@ -88,13 +93,15 @@ def _reload_code(config, init_dir):
         sudo('update-rc.d newdjangosite-{0} enable'.format(config))
         sudo('/etc/init.d/newdjangosite-{0} restart'.format(config))
 
-def _reload_web(config, nginx_dir):
+def _reload_web(config, nginx_dir, ssl):
     with cd(nginx_dir):
         sudo('cp {0}-newdjangosite-com /etc/nginx/sites-enabled/'.format(config))
-        #sudo('cp ssl/{0}.newdjangosite.com.* /etc/nginx/ssl'.format(config))
-        #sudo('chown root /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
-        #sudo('chgrp root /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
-        #sudo('chmod 644 /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
+        if ssl:
+            sudo('cp ssl/{0}.newdjangosite.com.* /etc/nginx/ssl'.format(config))
+            sudo('chown root /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
+            sudo('chgrp root /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
+            sudo('chmod 644 /etc/nginx/ssl/{0}.newdjangosite.com.*'.format(config))
+
         sudo('/etc/init.d/nginx reload')
 
 
