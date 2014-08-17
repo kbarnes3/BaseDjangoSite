@@ -3,19 +3,17 @@ from fabric.api import cd, run, sudo
 from deploy import deploy
 
 
-def setup_server():
-    packages = [
+def setup_server(setup_wins=''):
+    base_packages = [
         'git',
         'python-virtualenv',
         'mercurial',
         'python-psycopg2',
         'postgresql',
-        'python-flup',
         'nginx'
     ]
 
-    for package in packages:
-        sudo('apt-get install --yes {0}'.format(package))
+    _install_packages(base_packages)
 
     username = run('echo $USER')
 
@@ -34,6 +32,24 @@ def setup_server():
     sudo('chmod 777 /var/fastcgi')
     sudo('rm /etc/nginx/sites-enabled/default')
     sudo('/etc/init.d/nginx start')
+
+    if setup_wins:
+        _setup_wins()
+
+
+def _install_packages(packages):
+    for package in packages:
+        sudo('apt-get install --yes {0}'.format(package))
+
+
+def _setup_wins():
+    wins_packages = [
+        'samba',
+        'winbind',
+    ]
+
+    _install_packages(wins_packages)
+    sudo('sed -i s/\'hosts:.*/hosts:          files dns wins/\' /etc/nsswitch.conf')
 
 
 def setup_deployment(config, repo):
