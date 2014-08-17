@@ -3,8 +3,8 @@ To set up a newdjangosite server from a fresh Ubuntu Server 12.04 LTS installati
 1. Run 'sudo apt-get update'
 2. Run 'sudo apt-get dist-upgrade'
 3. Install the OpenSSH server using 'sudo apt-get install openssh-server'
-4. Run 'ssh-keygen -C _email_' and register ~/.ssh/id_rsa.pub with GitHub
-5. In the /web directory in a local dev environment, run 'fab setup_server'
+4. Run 'ssh-keygen -C _email_' and register ~/.ssh/id_rsa.pub with GitHub. An empty passphrase is less secure, but makes deployments faster.
+5. In the /web directory in a local dev environment, run 'fab setup_server' or 'fab setup_server:setup_wins=True' depending on whether WINS name resolution is needed. When in doubt, omit setup_wins.
 6. When prompted for a host string, enter one in the form of '_user_@_host_'
 7. When prompted to "enter password for new role", enter a password to remotely access PostgreSQL
 
