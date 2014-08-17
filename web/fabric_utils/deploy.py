@@ -28,9 +28,9 @@ def deploy(config):
     PYTHON_DIR = '/var/www/python'
     repo_dir = '{0}/newdjangosite-{1}'.format(PYTHON_DIR, config)
     web_dir = '{0}/web'.format(repo_dir)
-    config_dir = '{0}/config/ubuntu-12.04'.format(repo_dir)
+    config_dir = '{0}/config/ubuntu-14.04'.format(repo_dir)
     daily_scripts_dir = '{0}/cron.daily'.format(config_dir)
-    init_dir = '{0}/init.d'.format(config_dir)
+    uwsgi_dir = '{0}/uwsgi'.format(config_dir)
     nginx_dir = '{0}/nginx'.format(config_dir)
     virtualenv_python = '{0}/venv/bin/python'.format(repo_dir)
 
@@ -38,7 +38,7 @@ def deploy(config):
     _compile_source(config, repo_dir, web_dir, virtualenv_python)
     _update_scripts(config, daily_scripts_dir)
     _update_database(config, web_dir, virtualenv_python)
-    _reload_code(config, init_dir)
+    _reload_code(config, uwsgi_dir)
     _reload_web(config, nginx_dir, use_ssl)
     _run_tests(config, web_dir, virtualenv_python)
 
@@ -85,13 +85,12 @@ def _update_database(config, web_dir, virtualenv_python):
         sudo('{0} manage_{1}.py migrate'.format(virtualenv_python, config))
 
 
-def _reload_code(config, init_dir):
-    with cd(init_dir):
-        sudo('cp newdjangosite-{0} /etc/init.d'.format(config))
-        sudo('chmod 755 /etc/init.d/newdjangosite-{0}'.format(config))
-        sudo('update-rc.d newdjangosite-{0} defaults'.format(config))
-        sudo('update-rc.d newdjangosite-{0} enable'.format(config))
-        sudo('/etc/init.d/newdjangosite-{0} restart'.format(config))
+def _reload_code(config, uwsgi_dir):
+    with cd(uwsgi_dir):
+        sudo('cp newdjangosite-{0}.ini /etc/uwsgi/apps-enabled'.format(config))
+        sudo('chmod 755 /etc/uwsgi/apps-enabled/newdjangosite-{0}.ini'.format(config))
+        sudo('/etc/init.d/uwsgi start newdjangosite-{0}'.format(config))
+        sudo('/etc/init.d/uwsgi reload newdjangosite-{0}'.format(config))
 
 def _reload_web(config, nginx_dir, ssl):
     with cd(nginx_dir):

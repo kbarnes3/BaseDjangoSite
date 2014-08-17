@@ -1,4 +1,4 @@
-To set up a newdjangosite server from a fresh Ubuntu Server 12.04 LTS installation:
+To set up a newdjangosite server from a fresh Ubuntu Server 14.04 LTS installation:
 
 1. Run 'sudo apt-get update'
 2. Run 'sudo apt-get dist-upgrade'
@@ -15,7 +15,7 @@ To set up a new deployment on a properly configured (see above) newdjangosite se
 4. When prompted for a primary email and subsequent fields, enter the information for the Django superuser to create
 5. To deploy changes in the future, after committing/pushing run 'fab deploy:_deployment_'
 6. If this is the first deployment on a server, consider updating the global configurations for the server. To do so:
-    1. Update the files in /config/ubuntu-12.04/global. Look for the 'newdjangosite' prompts for commonly changed values
+    1. Update the files in /config/ubuntu-14.04/global. Look for the 'newdjangosite' prompts for commonly changed values
     2. After updating, commit/push your changes and run fab deploy
     3. Run 'fab deploy_global_config:_deployment_'
     4. If PostgreSQL does not start after the update, a reboot may be needed

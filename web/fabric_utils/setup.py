@@ -10,7 +10,9 @@ def setup_server(setup_wins=''):
         'mercurial',
         'python-psycopg2',
         'postgresql',
-        'nginx'
+        'nginx',
+        'uwsgi',
+        'uwsgi-plugin-python',
     ]
 
     _install_packages(base_packages)
@@ -28,8 +30,8 @@ def setup_server(setup_wins=''):
     sudo('createuser -E -P -s {0}'.format(username), user='postgres')
     run('createuser -s root')
 
-    sudo('mkdir /var/fastcgi')
-    sudo('chmod 777 /var/fastcgi')
+    sudo('mkdir /var/uwsgi')
+    sudo('chmod 777 /var/uwsgi')
     sudo('rm /etc/nginx/sites-enabled/default')
     sudo('/etc/init.d/nginx start')
 
