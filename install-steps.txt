@@ -3,7 +3,7 @@ To start a new site:
 1. Create an emtpy Git repo and copy the contents of this repo into it (excluding this file, README.md, and possibly LICENSE.TXT).
 2. Rename /web/newdjangosite appropriately.
 3. Rename all files containing "newdjangosite" appropriately. The command 'where /r . *newdjangosite*' should return nothing when you are done.
-4. Replace all "newdjangosite" strings inside files appropriately. The command 'findstr /pins newdjangosite *' should return nothing when you are done.
+4. Replace all "newdjangosite" and "NewDjangoSite" strings inside files appropriately. "newdjangosite" is used for variables and URIs and should be replaced with all lowercase characters. "NewDjangoSite" is used for human readable strings and can be replaced with mixed case, spaces, symbols, etc. The command 'findstr /pins newdjangosite *' should return nothing when you are done.
 5. Commit the all the files to Git.
 6. Follow the instructions in setup-dev.txt to set up a local development environment.
 7. Follow the instructions in setup-server.txt to set up a server deployment.
