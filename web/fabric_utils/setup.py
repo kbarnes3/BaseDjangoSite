@@ -7,7 +7,6 @@ def setup_server(setup_wins=''):
     base_packages = [
         'git',
         'python-virtualenv',
-        'mercurial',
         'python-psycopg2',
         'postgresql',
         'nginx',
