@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'common',
     'django.contrib.admin',
-    'south',
     'users',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
@@ -136,6 +135,8 @@ AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = '/users/login'
 LOGIN_REDIRECT_URL = '/'
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

@@ -1,42 +1,30 @@
 # -*- coding: utf-8 -*-
-import datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import django.utils.timezone
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'User'
-        db.create_table(u'users_user', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('primary_email', self.gf('django.db.models.fields.EmailField')(unique=True, max_length=255)),
-            ('given_name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('surname', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('is_admin', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal(u'users', ['User'])
+    dependencies = [
+    ]
 
-
-    def backwards(self, orm):
-        # Deleting model 'User'
-        db.delete_table(u'users_user')
-
-
-    models = {
-        u'users.user': {
-            'Meta': {'object_name': 'User'},
-            'given_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_admin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'primary_email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '255'}),
-            'surname': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        }
-    }
-
-    complete_apps = ['users']
+    operations = [
+        migrations.CreateModel(
+            name='User',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('password', models.CharField(max_length=128, verbose_name='password')),
+                ('last_login', models.DateTimeField(default=django.utils.timezone.now, verbose_name='last login')),
+                ('primary_email', models.EmailField(unique=True, max_length=255)),
+                ('given_name', models.CharField(max_length=50)),
+                ('surname', models.CharField(max_length=50)),
+                ('is_admin', models.BooleanField(default=False)),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+    ]

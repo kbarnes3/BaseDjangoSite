@@ -81,7 +81,6 @@ def _update_scripts(config, daily_scripts_dir):
 
 def _update_database(config, web_dir, virtualenv_python):
     with cd(web_dir):
-        sudo('{0} manage_{1}.py syncdb'.format(virtualenv_python, config))
         sudo('{0} manage_{1}.py migrate'.format(virtualenv_python, config))
 
 
