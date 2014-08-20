@@ -15,12 +15,15 @@ def setup_server(setup_wins=''):
     ]
 
     _install_packages(base_packages)
+    if setup_wins:
+        _setup_wins()
 
     username = run('echo $USER')
 
     sudo('addgroup webadmin')
     sudo('adduser {0} webadmin'.format(username))
 
+    sudo('mkdir /etc/nginx/ssl')
     sudo('mkdir /var/www')
     sudo('mkdir /var/www/python')
     sudo('chgrp -R webadmin /var/www')
@@ -33,9 +36,6 @@ def setup_server(setup_wins=''):
     sudo('chmod 777 /var/uwsgi')
     sudo('rm /etc/nginx/sites-enabled/default')
     sudo('/etc/init.d/nginx start')
-
-    if setup_wins:
-        _setup_wins()
 
 
 def _install_packages(packages):
