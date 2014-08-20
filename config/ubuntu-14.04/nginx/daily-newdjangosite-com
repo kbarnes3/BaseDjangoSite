@@ -47,6 +47,8 @@ server {
 #	ssl_certificate /etc/nginx/ssl/daily.newdjangosite.com.crt;
 #	ssl_certificate_key /etc/nginx/ssl/daily.newdjangosite.com.key;
 #
+#	ssl_session_timeout 5m;
+#
 #	access_log  /var/log/nginx/localhost.access.log;
 #
 #	location / {
