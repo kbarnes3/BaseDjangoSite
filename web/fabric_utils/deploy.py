@@ -112,8 +112,8 @@ def deploy_global_config(config):
     global_dir = '/var/www/python/newdjangosite-{0}/config/ubuntu-12.04/global'.format(config)
     SHARED_MEM = '/etc/sysctl.d/30-postgresql-shm.conf'
     NGINX_CONF = '/etc/nginx/nginx.conf'
-    POSTGRES_HBA = '/etc/postgresql/9.1/main/pg_hba.conf'
-    POSTGRES_CONF = '/etc/postgresql/9.1/main/postgresql.conf'
+    POSTGRES_HBA = '/etc/postgresql/9.3/main/pg_hba.conf'
+    POSTGRES_CONF = '/etc/postgresql/9.3/main/postgresql.conf'
 
     with cd(global_dir):
         sudo('cp 30-postgresql-shm.conf {0}'.format(SHARED_MEM))
