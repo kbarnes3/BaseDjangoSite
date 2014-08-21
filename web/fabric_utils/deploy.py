@@ -109,7 +109,7 @@ def _run_tests(config, web_dir, virtualenv_python):
 
 
 def deploy_global_config(config):
-    global_dir = '/var/www/python/newdjangosite-{0}/config/ubuntu-12.04/global'.format(config)
+    global_dir = '/var/www/python/newdjangosite-{0}/config/ubuntu-14.04/global'.format(config)
     SHARED_MEM = '/etc/sysctl.d/30-postgresql-shm.conf'
     NGINX_CONF = '/etc/nginx/nginx.conf'
     POSTGRES_HBA = '/etc/postgresql/9.3/main/pg_hba.conf'
@@ -143,7 +143,7 @@ def shutdown(config):
 
     PYTHON_DIR = '/var/www/python'
     repo_dir = '{0}/newdjangosite-{1}'.format(PYTHON_DIR, config)
-    nginx_dir = '{0}/config/ubuntu-12.04/nginx/shutdown'.format(repo_dir)
+    nginx_dir = '{0}/config/ubuntu-14.04/nginx/shutdown'.format(repo_dir)
 
     _update_source(repo_dir, branch)
     _reload_web(config, nginx_dir)
