@@ -1,4 +1,4 @@
-To set up a newdjangosite server from a fresh Ubuntu Server 14.04 LTS installation:
+To set up a NewDjangoSite server from a fresh Ubuntu Server 14.04 LTS installation:
 
 1. Run 'sudo apt-get update'
 2. Run 'sudo apt-get dist-upgrade'
@@ -8,7 +8,7 @@ To set up a newdjangosite server from a fresh Ubuntu Server 14.04 LTS installati
 6. When prompted for a host string, enter one in the form of '_user_@_host_'
 7. When prompted to "enter password for new role", enter a password to remotely access PostgreSQL
 
-To set up a new deployment on a properly configured (see above) newdjangosite server:
+To set up a new deployment on a properly configured (see above) NewDjangoSite server:
 1. Consider updating the username and password found in /web/newdjangosite/settings__deployment_.py and committing/pushing it. Note that the Fabric script won't work with passwords containing shell escape characters.
 2. In the /web directory in a local dev environment, run 'fab setup_deployment:_deployment_,"_git@github.com:user/repo.git_"'
 3. When prompted for a host string, enter one in the form of '_user_@_host_'
