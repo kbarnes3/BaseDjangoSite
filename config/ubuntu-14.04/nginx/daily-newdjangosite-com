@@ -1,3 +1,4 @@
+# Serve the site over HTTP
 server {
 	listen   80;
 	server_name  daily.newdjangosite.com;
@@ -28,6 +29,7 @@ server {
 	}
 }
 
+# Redirect HTTP to HTTPS
 #server {
 #	listen   80;
 #	server_name  daily.newdjangosite.com;
@@ -39,7 +41,8 @@ server {
 #	}
 #
 #}
-#
+
+# Serve the site on HTTPS
 #server {
 #	listen 443;
 #	server_name  daily.newdjangosite.com;

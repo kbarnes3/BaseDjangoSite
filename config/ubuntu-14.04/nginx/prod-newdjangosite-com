@@ -1,3 +1,4 @@
+# Redirect www.newdjangosite.com to newdjangosite.com
 server {
 	listen   80;
 	server_name  www.newdjangosite.com;
@@ -7,8 +8,10 @@ server {
 	location / {
 		rewrite ^(.*) http://newdjangosite.com$1;
 	}
+
 }
 
+# Serve the site over HTTP
 server {
 	listen   80 default;
 	server_name  newdjangosite.com;
@@ -39,17 +42,20 @@ server {
 	}
 }
 
+# Redirect HTTP to HTTPS
+#server {
 #	listen   80;
 #	server_name  newdjangosite.com;
 #
 #	access_log  /var/log/nginx/localhost.access.log;
 #
 #	location / {
-#		rewrite ^(.*) https://prod.newdjangosite.com$1;
+#		rewrite ^(.*) https://newdjangosite.com$1;
 #	}
 #
 #}
-#
+
+# Serve the site on HTTPS
 #server {
 #	listen 443 default;
 #	server_name  newdjangosite.com;
