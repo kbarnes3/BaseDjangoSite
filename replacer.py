@@ -13,7 +13,7 @@ EXCLUDED_EXTENSIONS = ['.pyc']
 def replace(file_path, site_variable, site_title):
     modified = False
 
-    with open(file_path, 'r') as file_handle:
+    with open(file_path, 'rb') as file_handle:
         contents = file_handle.read()
 
     if PLACEHOLDER_VARIABLE in contents:
@@ -25,7 +25,7 @@ def replace(file_path, site_variable, site_title):
         modified = True
 
     if modified:
-        with open(file_path, 'w') as file_handle:
+        with open(file_path, 'wb') as file_handle:
             file_handle.write(contents)
         print('Updated {0}'.format(file_path))
     else:
@@ -65,7 +65,7 @@ def replace_in_files(site_variable, site_title):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(description='Finds and replaces ''newdjangosite'' to set up a new site')
+    parser = ArgumentParser(description='Injects your site''s name into the template to set up a new site')
     parser.add_argument('site_variable',
                         help='The name of the site in a form suitable for a variable. This should consist of only lowercase characters.')
     parser.add_argument('site_title',
