@@ -140,10 +140,11 @@ def _update_permissions(path, owner, group, mode):
 def shutdown(config):
     configuration = configurations[config]
     branch = configuration['branch']
+    use_ssl = configuration['ssl']
 
     PYTHON_DIR = '/var/www/python'
     repo_dir = '{0}/newdjangosite-{1}'.format(PYTHON_DIR, config)
     nginx_dir = '{0}/config/ubuntu-14.04/nginx/shutdown'.format(repo_dir)
 
     _update_source(repo_dir, branch)
-    _reload_web(config, nginx_dir)
+    _reload_web(config, nginx_dir, use_ssl)
