@@ -14,6 +14,8 @@ DATABASES = {
     }
 }
 
+EMAIL_SUBJECT_PREFIX = '[newdjangosite-staging] '
+
 ALLOWED_HOSTS = ['staging.newdjangosite.com']
 
 STATIC_ROOT = '/var/www/newdjangosite-staging/static'

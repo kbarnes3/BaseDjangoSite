@@ -14,6 +14,9 @@ DATABASES = {
     }
 }
 
+
+EMAIL_SUBJECT_PREFIX = '[newdjangosite-daily] '
+
 ALLOWED_HOSTS = ['daily.newdjangosite.com']
 
 STATIC_ROOT = '/var/www/newdjangosite-daily/static'
