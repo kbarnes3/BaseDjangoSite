@@ -17,7 +17,7 @@ DATABASES = {
 
 EMAIL_SUBJECT_PREFIX = '[newdjangosite-daily] '
 
-ALLOWED_HOSTS = ['daily.newdjangosite.com']
+ALLOWED_HOSTS = ['daily.yourdomain.tld']
 
 STATIC_ROOT = '/var/www/newdjangosite-daily/static'
 

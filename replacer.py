@@ -4,13 +4,14 @@ from os.path import join, splitext
 
 PLACEHOLDER_VARIABLE = 'newdjangosite'
 PLACEHOLDER_TITLE = 'NewDjangoSite'
+PLACEHOLDER_DOMAIN = 'yourdomain.tld'
 
 EXCLUDED_DIRECTORIES = ['.git', '.idea', 'venv']
 EXCLUDED_FILES = ['replacer.py']
 EXCLUDED_EXTENSIONS = ['.pyc']
 
 
-def replace(file_path, site_variable, site_title):
+def replace(file_path, site_variable, site_title, site_domain):
     modified = False
 
     with open(file_path, 'rb') as file_handle:
@@ -24,6 +25,10 @@ def replace(file_path, site_variable, site_title):
         contents = contents.replace(PLACEHOLDER_TITLE, site_title)
         modified = True
 
+    if PLACEHOLDER_DOMAIN in contents:
+        contents = contents.replace(PLACEHOLDER_DOMAIN, site_domain)
+        modified = True
+
     if modified:
         with open(file_path, 'wb') as file_handle:
             file_handle.write(contents)
@@ -32,7 +37,7 @@ def replace(file_path, site_variable, site_title):
         print('No changes to {0}'.format(file_path))
 
 
-def replace_in_files(site_variable, site_title):
+def replace_in_files(site_variable, site_title, site_domain):
     for root, dirs, files in walk('.'):
 
         # First, make sure we don't touch anything in excluded directories
@@ -50,10 +55,16 @@ def replace_in_files(site_variable, site_title):
                 print('Skipping {0}'.format(join(root, name)))
                 continue
 
-            # Rename the file if PLACEHOLDER_VARIABLE is in the file name
+            # Rename the file if PLACEHOLDER_VARIABLE or PLACEHOLDER_DOMAIN is in the file name
             if PLACEHOLDER_VARIABLE in name:
                 old_path = join(root, name)
                 new_name = name.replace(PLACEHOLDER_VARIABLE, site_variable)
+                full_path = join(root, new_name)
+                rename(old_path, full_path)
+                print('Renaming {0} to {1}'.format(old_path, full_path))
+            elif PLACEHOLDER_DOMAIN in name:
+                old_path = join(root, name)
+                new_name = name.replace(PLACEHOLDER_DOMAIN, site_domain)
                 full_path = join(root, new_name)
                 rename(old_path, full_path)
                 print('Renaming {0} to {1}'.format(old_path, full_path))
@@ -61,7 +72,7 @@ def replace_in_files(site_variable, site_title):
                 full_path = join(root, name)
 
             # Find and replace anything in the contents of the file
-            replace(full_path, site_variable, site_title)
+            replace(full_path, site_variable, site_title, site_domain)
 
 
 if __name__ == "__main__":
@@ -70,8 +81,10 @@ if __name__ == "__main__":
                         help='The name of the site in a form suitable for a variable. This should consist of only lowercase characters.')
     parser.add_argument('site_title',
                         help='The name of the site in your preferred human-readable form. This can contain mixed case, spaces, symbols, etc.')
+    parser.add_argument('site_domain',
+                        help='The domain for your site. This should omit "www."')
     args = parser.parse_args()
 
-    rename('web/{0}'.format(PLACEHOLDER_VARIABLE), 'web/{0}'.format(args.site_variable))
     print('Renaming web/{0} to web/{1}'.format(PLACEHOLDER_VARIABLE, args.site_variable))
-    replace_in_files(args.site_variable, args.site_title)
+    rename('web/{0}'.format(PLACEHOLDER_VARIABLE), 'web/{0}'.format(args.site_variable))
+    replace_in_files(args.site_variable, args.site_title, args.site_domain)

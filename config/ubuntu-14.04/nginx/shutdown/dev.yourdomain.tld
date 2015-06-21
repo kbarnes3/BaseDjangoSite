@@ -1,6 +1,6 @@
 server {
 	listen   80;
-	server_name  dev.newdjangosite.com;
+	server_name  dev.yourdomain.tld;
 
 	access_log  /var/log/nginx/localhost.access.log;
 
@@ -13,10 +13,10 @@ server {
 
 #server {
 #	listen 443;
-#	server_name  dev.newdjangosite.com;
+#	server_name  dev.yourdomain.tld;
 #	ssl on;
-#	ssl_certificate /etc/nginx/ssl/dev.newdjangosite.com.crt;
-#	ssl_certificate_key /etc/nginx/ssl/dev.newdjangosite.com.key;
+#	ssl_certificate /etc/nginx/ssl/dev.yourdomain.tld.crt;
+#	ssl_certificate_key /etc/nginx/ssl/dev.yourdomain.tld.key;
 #
 #	access_log  /var/log/nginx/localhost.access.log;
 #
