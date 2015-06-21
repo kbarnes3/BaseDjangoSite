@@ -43,9 +43,11 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     {% if user.is_authenticated %}
-                        <p class="navbar-text pull-right">
-                            Hello {{ user.get_short_name }}! <a class="navbar-link" href="/users/logout">Logout</a>
-                        </p>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a class="navbar-link" href="/users/password-change">Change Password</a></li>
+                            <li><a class="navbar-link" href="/users/logout"><span class="hidden-xs">Logout</span><span class="visible-xs">Logout {{ user.get_short_name }}</span></a></li>
+                        </ul>
+                        <p class="navbar-text navbar-right hidden-xs">Hello {{ user.get_short_name }}!</p>
                     {% else %}
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="/users/login">Login</a></li>

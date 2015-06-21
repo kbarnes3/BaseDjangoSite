@@ -21,6 +21,14 @@ MANAGERS = ADMINS
 #    }
 #}
 
+#EMAIL_HOST = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+#EMAIL_HOST_USER = ''
+#EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = 'newdjangosite@yourdomain.tld'
+SERVER_EMAIL = 'newdjangosite-errors@yourdomain.tld'
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
