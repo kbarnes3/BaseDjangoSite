@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.models import get_current_site
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from users.models import User
@@ -25,7 +25,8 @@ class EmailPasswordResetForm(PasswordResetForm):
              subject_template_name='registration/password_reset_subject.txt',
              email_template_name='registration/password_reset_email.html',
              use_https=False, token_generator=default_token_generator,
-             from_email=None, request=None, html_email_template_name=None):
+             from_email=None, request=None, html_email_template_name=None,
+             extra_email_context=None):
         """
         Generates a one-use only link for resetting password and sends to the
         user.
@@ -47,10 +48,12 @@ class EmailPasswordResetForm(PasswordResetForm):
                 'token': token_generator.make_token(user),
                 'protocol': 'https' if use_https else 'http',
             }
-
+            if extra_email_context is not None:
+                context.update(extra_email_context)
             self.send_mail(subject_template_name, email_template_name,
                            context, from_email, user.primary_email,
                            html_email_template_name=html_email_template_name)
+
 
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required

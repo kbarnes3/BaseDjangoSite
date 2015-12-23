@@ -1,7 +1,6 @@
 from settings_base import *
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {

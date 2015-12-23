@@ -3,7 +3,6 @@ from settings_base import *
 #Settings for running a local development server using runserver
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
