@@ -5,28 +5,33 @@ from os.path import join, splitext
 PLACEHOLDER_VARIABLE = 'newdjangosite'
 PLACEHOLDER_TITLE = 'NewDjangoSite'
 PLACEHOLDER_DOMAIN = 'yourdomain.tld'
+PLACEHOLDER_GITHUB_REPO = 'GitHubUser/GitHubRepo'
 
 EXCLUDED_DIRECTORIES = ['.git', '.idea', 'venv']
 EXCLUDED_FILES = ['replacer.py']
 EXCLUDED_EXTENSIONS = ['.pyc']
 
 
-def replace(file_path, site_variable, site_title, site_domain):
+def replace(file_path, site_variable, site_title, site_domain, github_repo):
     modified = False
 
     with open(file_path, 'rb') as file_handle:
         contents = file_handle.read()
 
-    if PLACEHOLDER_VARIABLE in contents:
-        contents = contents.replace(PLACEHOLDER_VARIABLE, site_variable)
+    if bytearray(PLACEHOLDER_VARIABLE, 'utf-8') in contents:
+        contents = contents.replace(bytearray(PLACEHOLDER_VARIABLE, 'utf-8'), bytearray(site_variable, 'utf-8'))
         modified = True
 
-    if PLACEHOLDER_TITLE in contents:
-        contents = contents.replace(PLACEHOLDER_TITLE, site_title)
+    if bytearray(PLACEHOLDER_TITLE, 'utf-8') in contents:
+        contents = contents.replace(bytearray(PLACEHOLDER_TITLE, 'utf-8'), bytearray(site_title, 'utf-8'))
         modified = True
 
-    if PLACEHOLDER_DOMAIN in contents:
-        contents = contents.replace(PLACEHOLDER_DOMAIN, site_domain)
+    if bytearray(PLACEHOLDER_DOMAIN, 'utf-8') in contents:
+        contents = contents.replace(bytearray(PLACEHOLDER_DOMAIN, 'utf-8'), bytearray(site_domain, 'utf-8'))
+        modified = True
+
+    if bytearray(PLACEHOLDER_GITHUB_REPO, 'utf-8') in contents:
+        contents = contents.replace(bytearray(PLACEHOLDER_GITHUB_REPO, 'utf-8'), bytearray(github_repo, 'utf-8'))
         modified = True
 
     if modified:
@@ -37,7 +42,7 @@ def replace(file_path, site_variable, site_title, site_domain):
         print('No changes to {0}'.format(file_path))
 
 
-def replace_in_files(site_variable, site_title, site_domain):
+def replace_in_files(site_variable, site_title, site_domain, github_repo):
     for root, dirs, files in walk('.'):
 
         # First, make sure we don't touch anything in excluded directories
@@ -72,7 +77,7 @@ def replace_in_files(site_variable, site_title, site_domain):
                 full_path = join(root, name)
 
             # Find and replace anything in the contents of the file
-            replace(full_path, site_variable, site_title, site_domain)
+            replace(full_path, site_variable, site_title, site_domain, github_repo)
 
 
 if __name__ == "__main__":
@@ -83,8 +88,10 @@ if __name__ == "__main__":
                         help='The name of the site in your preferred human-readable form. This can contain mixed case, spaces, symbols, etc.')
     parser.add_argument('site_domain',
                         help='The domain for your site. This should omit "www."')
+    parser.add_argument('github_repo',
+                        help='The GitHub repo this site will be deployed from. It should be of the form GitHubUser/GitHubRepo')
     args = parser.parse_args()
 
     print('Renaming web/{0} to web/{1}'.format(PLACEHOLDER_VARIABLE, args.site_variable))
     rename('web/{0}'.format(PLACEHOLDER_VARIABLE), 'web/{0}'.format(args.site_variable))
-    replace_in_files(args.site_variable, args.site_title, args.site_domain)
+    replace_in_files(args.site_variable, args.site_title, args.site_domain, args.github_repo)

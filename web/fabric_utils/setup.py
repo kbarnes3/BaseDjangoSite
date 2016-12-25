@@ -1,40 +1,60 @@
 from importlib import import_module
-from fabric.api import cd, run, sudo
-from deploy import deploy
+from fabric.api import cd, run, settings, sudo
+from fabric.contrib.files import exists
+from .deploy import AllowedException, deploy, get_repo_dir, WEBADMIN_GROUP
+
+
+REPO_FULL_NAME = 'GitHubUser/GitHubRepo'
+
+
+def setup_user(user):
+    from fabricghdeploykeys.fabric_commands import setup_user as setup_user_internal
+
+    setup_user_internal(user, WEBADMIN_GROUP, add_sudo='yes')
+
+    if not exists('/usr/bin/createuser'):
+        _install_packages(['postgresql'])
+
+    with settings(abort_exception=AllowedException):
+        try:
+            sudo('createuser -s {0}'.format(user), user='postgres')
+        except AllowedException:
+            pass
 
 
 def setup_server(setup_wins=''):
+    from fabricghdeploykeys.fabric_commands.permissions import make_directory
+
     base_packages = [
         'git',
-        'python-virtualenv',
-        'python-psycopg2',
+        'python3-venv',
         'postgresql',
+        'python3-psycopg2',
         'nginx',
         'uwsgi',
-        'uwsgi-plugin-python',
+        'uwsgi-plugin-python3',
     ]
 
     _install_packages(base_packages)
+
     if setup_wins:
         _setup_wins()
 
-    username = run('echo $USER')
+    sudo('mkdir -p /etc/nginx/ssl')
+    make_directory(WEBADMIN_GROUP, '/var/www')
+    make_directory(WEBADMIN_GROUP, '/var/www/python')
 
-    sudo('addgroup webadmin')
-    sudo('adduser {0} webadmin'.format(username))
+    with settings(abort_exception=AllowedException):
+        try:
+            run('createuser -s root')
+        except AllowedException:
+            pass
 
-    sudo('mkdir /etc/nginx/ssl')
-    sudo('mkdir /var/www')
-    sudo('mkdir /var/www/python')
-    sudo('chgrp -R webadmin /var/www')
-    sudo('chmod -R ug+w /var/www')
+    make_directory('root', '/var/uwsgi', '777')
 
-    sudo('createuser -E -P -s {0}'.format(username), user='postgres')
-    run('createuser -s root')
-
-    sudo('mkdir /var/uwsgi')
-    sudo('chmod 777 /var/uwsgi')
-    sudo('rm /etc/nginx/sites-enabled/default')
+    default_site = '/etc/nginx/sites-enabled/default'
+    if exists(default_site):
+        sudo('rm {0}'.format(default_site))
     sudo('/etc/init.d/nginx start')
 
 
@@ -46,6 +66,7 @@ def _install_packages(packages):
 def _setup_wins():
     wins_packages = [
         'samba',
+        'smbclient',
         'winbind',
     ]
 
@@ -53,26 +74,71 @@ def _setup_wins():
     sudo('sed -i s/\'hosts:.*/hosts:          files dns wins/\' /etc/nsswitch.conf')
 
 
-def setup_deployment(config, repo):
-    settings = import_module('newdjangosite.settings_{0}'.format(config))
-    db_settings = settings.DATABASES['default']
+def setup_deployment(config):
+    django_settings = import_module('newdjangosite.settings_{0}'.format(config))
+    db_settings = django_settings.DATABASES['default']
     db_name = db_settings['NAME']
     db_user = db_settings['USER']
     db_password = db_settings['PASSWORD']
-    PYTHON_DIR = '/var/www/python'
-    repo_dir = '{0}/newdjangosite-{1}'.format(PYTHON_DIR, config)
+    repo_dir = get_repo_dir(config)
 
-    run('createdb --encoding=UTF8 --locale=en_US.UTF-8 --owner=postgres --template=template0 {0}'.format(db_name))
-    run('createuser -d -R -S {0}'.format(db_user))
+    database_created = False
+    with settings(abort_exception=AllowedException):
+        try:
+            run('createdb --encoding=UTF8 --locale=en_US.UTF-8 --owner=postgres --template=template0 {0}'.format(db_name))
+            database_created = True
+        except AllowedException:
+            pass
+
+    with settings(abort_exception=AllowedException):
+        try:
+            run('createuser -d -R -S {0}'.format(db_user))
+        except AllowedException:
+            pass
+
     run('psql -d postgres -c \"ALTER ROLE {0} WITH ENCRYPTED PASSWORD \'{1}\';\"'.format(db_user, db_password))
 
-    with cd(PYTHON_DIR):
-        run('git clone {0} newdjangosite-{1}'.format(repo, config))
+    _setup_repo(repo_dir)
 
     with cd(repo_dir):
-        run('virtualenv --system-site-packages venv')
+        if not exists('venv'):
+            run('python3 -m venv --system-site-packages venv')
+
+    global_dir = '{0}/config/ubuntu-16.04/global'.format(repo_dir)
+    with cd(global_dir):
+        uwsgi_socket = '/etc/systemd/system/uwsgi-app@.socket'
+        uwsgi_service = '/etc/systemd/system/uwsgi-app@.service'
+
+        if not exists(uwsgi_socket):
+            from fabricghdeploykeys.fabric_commands.permissions import set_permissions_file
+            sudo('cp uwsgi-app@.socket {0}'.format(uwsgi_socket))
+            set_permissions_file(uwsgi_socket, 'root', 'root', '644')
+
+        if not exists(uwsgi_service):
+            sudo('cp uwsgi-app@.service {0}'.format(uwsgi_service))
+            set_permissions_file(uwsgi_service, 'root', 'root', '644')
 
     deploy(config)
 
-    with cd(repo_dir):
-        run('venv/bin/python web/manage_{0}.py createsuperuser'.format(config))
+    if database_created:
+        with cd(repo_dir):
+            run('venv/bin/python web/manage_{0}.py createsuperuser'.format(config))
+
+
+def _setup_repo(repo_dir):
+    from fabricghdeploykeys.fabric_commands.permissions import make_directory
+
+    make_directory(WEBADMIN_GROUP, repo_dir)
+
+    if not exists('{0}/.git'.format(repo_dir)):
+        from fabricghdeploykeys.fabric_commands.git import clone
+        from fabricghdeploykeys.fabric_commands.ssh_key import create_key
+        from fabricghdeploykeys.oauth_flow import verify_access_token
+        from fabricghdeploykeys.repo_keys import add_repo_key
+
+        if not verify_access_token():
+            raise Exception('Unable to access GitHub account')
+        create_key(REPO_FULL_NAME, WEBADMIN_GROUP)
+        add_repo_key(REPO_FULL_NAME)
+        clone(REPO_FULL_NAME, repo_dir)
+

@@ -1,4 +1,4 @@
-from settings_base import *
+from .settings_base import *
 
 #Settings for running a local development server using runserver
 

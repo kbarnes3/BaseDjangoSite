@@ -6,7 +6,7 @@ from users.views import create_user_account, logout_user
 
 
 urlpatterns = [
-    url(r'^login/?$', login, {'template_name': 'users/login.html'}),
+    url(r'^login/?$', login, {'template_name': 'users/login.html'}, name='login_user'),
     url(r'^logout/?$', logout_user, name='logout_user'),
     url(r'^password-change/?$', password_change, {
         'template_name': 'users/password_change.html',

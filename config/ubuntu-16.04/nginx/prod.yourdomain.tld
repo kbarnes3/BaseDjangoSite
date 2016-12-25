@@ -1,12 +1,25 @@
-# Serve the site over HTTP
+# Redirect www.yourdomain.tld to yourdomain.tld
 server {
 	listen   80;
-	server_name  dev.yourdomain.tld;
+	server_name  www.yourdomain.tld;
 
 	access_log  /var/log/nginx/localhost.access.log;
 
 	location / {
-		uwsgi_pass unix:/var/uwsgi/newdjangosite-dev.sock;
+		rewrite ^(.*) http://yourdomain.tld$1;
+	}
+
+}
+
+# Serve the site over HTTP
+server {
+	listen   80 default;
+	server_name  yourdomain.tld;
+
+	access_log  /var/log/nginx/localhost.access.log;
+
+	location / {
+		uwsgi_pass unix:/var/run/uwsgi/newdjangosite-prod.socket;
 		uwsgi_param  QUERY_STRING       $query_string;
 		uwsgi_param  REQUEST_METHOD     $request_method;
 		uwsgi_param  CONTENT_TYPE       $content_type;
@@ -25,37 +38,37 @@ server {
 	}
 
 	location /static/ {
-		root   /var/www/newdjangosite-dev;
+		root   /var/www/newdjangosite-prod;
 	}
 }
 
 # Redirect HTTP to HTTPS
 #server {
 #	listen   80;
-#	server_name  dev.yourdomain.tld;
+#	server_name  yourdomain.tld www.yourdomain.tld;
 #
 #	access_log  /var/log/nginx/localhost.access.log;
 #
 #	location / {
-#		rewrite ^(.*) https://dev.yourdomain.tld$1;
+#		rewrite ^(.*) https://yourdomain.tld$1;
 #	}
 #
 #}
 
 # Serve the site on HTTPS
 #server {
-#	listen 443;
-#	server_name  dev.yourdomain.tld;
+#	listen 443 default;
+#	server_name  yourdomain.tld;
 #	ssl on;
-#	ssl_certificate /etc/nginx/ssl/dev.yourdomain.tld.crt;
-#	ssl_certificate_key /etc/nginx/ssl/dev.yourdomain.tld.key;
+#	ssl_certificate /etc/nginx/ssl/prod.yourdomain.tld.crt;
+#	ssl_certificate_key /etc/nginx/ssl/prod.yourdomain.tld.key;
 #
 #	ssl_session_timeout 5m;
 #
 #	access_log  /var/log/nginx/localhost.access.log;
 #
 #	location / {
-#		uwsgi_pass unix:/var/uwsgi/newdjangosite-dev.sock;
+#		uwsgi_pass unix:/var/run/uwsgi/newdjangosite-prod.socket;
 #		uwsgi_param  QUERY_STRING       $query_string;
 #		uwsgi_param  REQUEST_METHOD     $request_method;
 #		uwsgi_param  CONTENT_TYPE       $content_type;
@@ -74,7 +87,7 @@ server {
 #	}
 #
 #	location /static/ {
-#		root   /var/www/newdjangosite-dev;
+#		root   /var/www/newdjangosite-prod;
 #	}
 #}
 

@@ -1,4 +1,4 @@
-from settings_base import *
+from .settings_base import *
 
 DEBUG = True
 
@@ -12,6 +12,10 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default.
     }
 }
+
+EMAIL_SUBJECT_PREFIX = '[newdjangosite-dev] '
+
+ALLOWED_HOSTS = ['dev.yourdomain.tld']
 
 STATIC_ROOT = '/var/www/newdjangosite-dev/static'
 

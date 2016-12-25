@@ -1,23 +1,35 @@
-To set up a NewDjangoSite server from a fresh Ubuntu Server 14.04 LTS installation:
+To set up a NewDjangoSite server from a fresh Ubuntu Server 16.04 LTS installation:
 
 1. Run 'sudo apt-get update'
 2. Run 'sudo apt-get dist-upgrade'
-3. Install the OpenSSH server using 'sudo apt-get install openssh-server'
-4. Run 'ssh-keygen -C _email_' and register ~/.ssh/id_rsa.pub with GitHub. An empty passphrase is less secure, but makes deployments faster.
-5. In the /web directory in a local dev environment, run 'fab setup_server' or 'fab setup_server:setup_wins=True' depending on whether WINS name resolution is needed. When in doubt, omit setup_wins.
-6. When prompted for a host string, enter one in the form of '_user_@_host_'
-7. When prompted to "enter password for new role", enter a password to remotely access PostgreSQL
+3. Run 'sudo reboot'
+4. Install the OpenSSH server using 'sudo apt-get install openssh-server'
+5. Set up a local dev environment following setup-dev.txt and open a console with the venv activated. Use this console
+   for the following steps.
+6. From the /web directory, run 'fab setup_user:$linux_user$', where $linux_user$ is either an existing or new linux
+   account that will be able to deploy to this server
+7. When prompted for a host string, enter one in the form of '$user$@$host$' where $user$ is an existing sudo user,
+   likely configured during the Ubuntu installation and $host$ is the IP address of your server, or something that
+   resolves to it. After the initial setup, it should be possible to refer to the hostname from /etc/hostname as well
+   via WINS resolution
+8. Run 'fab setup_server' or 'fab setup_server:setup_wins=True' depending on whether WINS name resolution is needed. When in doubt, omit setup_wins.
+9. When prompted, make sure you log in as the user you setup with 'fab setup_user'
+10. Optionally, run 'fab setup_user:$linux_user$' again to grant access to others
 
-To set up a new deployment on a properly configured (see above) NewDjangoSite server:
-1. Consider updating the username and password found in /web/newdjangosite/settings__deployment_.py. Note that the Fabric script won't work with passwords containing shell escape characters.
-2. Ensure all changes you want deployed are pushed to the remote your server will connect to, such as your GitHub repo.
-3. In the /web directory in a local dev environment, run 'fab setup_deployment:_deployment_,"_git@github.com:user/repo.git_"'
-4. When prompted for a host string, enter one in the form of '_user_@_host_'
+To set up a new deployment on a properly configured (see above) Kitties! server:
+1. Consider updating the username and password found in /web/kitties/settings_$deployment$.py and committing/pushing it.
+   Note that the Fabric script won't work with passwords containing shell escape characters.
+2. Run 'auth' and follow the prompts in the browser, logging in with an account that can set deploy keys on this repo
+3. In the /web directory in a local dev environment, run 'fab setup_deployment:$deployment$'
+3. When prompted for a host string, enter one in the form of '$user$@$host$'
+4. When prompted for a passphrase after seeing "Generating public/private rsa key pair",
+   an empty passphrase is recommended
 5. When prompted for a primary email and subsequent fields, enter the information for the Django superuser to create
-6. To deploy changes in the future, after committing/pushing run 'fab deploy:_deployment_'
-7. If this is the first deployment on a server, consider updating the global configurations for the server. To do so:
-    1. Update the files in /config/ubuntu-14.04/global. Look for the 'newdjangosite' prompts for commonly changed values
+6. To deploy changes in the future, after committing/pushing run 'fab deploy:$deployment$'
+7. Optionally, run 'auth delete' to remove your local GitHub authorization token
+8. If this is the first deployment on a server, consider updating the global configurations for the server. To do so:
+    1. Update the files in /config/ubuntu-16.04/global. Look for the 'newdjangosite' prompts for commonly changed values
     2. After updating, commit/push your changes and run fab deploy
-    3. Run 'fab deploy_global_config:_deployment_'
+    3. Run 'fab deploy_global_config:$deployment$'
     4. If PostgreSQL does not start after the update, a reboot may be needed
 
