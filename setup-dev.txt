@@ -8,16 +8,6 @@ To set up a local development environment:
     b. venv\Scripts\activate.bat
     c. pip install --requirement=requirements.txt
     d. pip install --requirement=dev-requirements.txt
-    e. If you get errors while installing Cryptography, you may need to build Cryptography manually
-        i. Install Visual Studio 2015 with all the C++ options enabled
-        ii. Go to https://jenkins.cryptography.io/job/openssl-release/ and click green check box in the 2015 column for your architecture
-        iii. Download and extract the last successful artifacts (e.g., openssl-1.0.2j.zip)
-        iv. In your repo directory, run:
-            1. "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
-            2. set LIB=*YOUR_EXTRACTED_OPENSSL*\lib;%LIB%
-            3. set INCLUDE=*YOUR_EXTRACTED_OPENSSL*\include;%INCLUDE%
-            4. pip install cryptopgraphy
-        v. Rerun pip install --requirement=dev-requirements.txt
 3. If needed, run 'python secret_key.py' from the root of the repo to generate a secret key and set the SECRET_KEY setting in web/newdjangosite/settings_base.py to be the output of the previous command
 4. Set up the local database. From the /web directory run:
     a. python manage.py migrate
