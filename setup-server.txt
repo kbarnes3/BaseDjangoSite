@@ -16,7 +16,7 @@ To set up a NewDjangoSite server from a fresh Ubuntu Server 16.04 LTS installati
 9. When prompted, make sure you log in as the user you setup with 'fab setup_user'
 10. Optionally, run 'fab setup_user:$linux_user$' again to grant access to others
 
-To set up a new deployment on a properly configured (see above) Kitties! server:
+To set up a new deployment on a properly configured (see above) NewDjangoSite server:
 1. Consider updating the username and password found in /web/kitties/settings_$deployment$.py and committing/pushing it.
    Note that the Fabric script won't work with passwords containing shell escape characters.
 2. Run 'auth' and follow the prompts in the browser, logging in with an account that can set deploy keys on this repo
