@@ -97,12 +97,12 @@ def _reload_code(config, uwsgi_dir):
 
 def _reload_web(config, nginx_dir, ssl):
     with cd(nginx_dir):
-        sudo('cp {0}.newdjangosite.kbarnes3.com /etc/nginx/sites-enabled/'.format(config))
+        sudo('cp {0}.yourdomain.tld /etc/nginx/sites-enabled/'.format(config))
         if ssl:
-            sudo('cp ssl/{0}.newdjangosite.kbarnes3.com.* /etc/nginx/ssl'.format(config))
-            sudo('chown root /etc/nginx/ssl/{0}.newdjangosite.kbarnes3.com.*'.format(config))
-            sudo('chgrp root /etc/nginx/ssl/{0}.newdjangosite.kbarnes3.com.*'.format(config))
-            sudo('chmod 644 /etc/nginx/ssl/{0}.newdjangosite.kbarnes3.com.*'.format(config))
+            sudo('cp ssl/{0}.yourdomain.tld.* /etc/nginx/ssl'.format(config))
+            sudo('chown root /etc/nginx/ssl/{0}.yourdomain.tld.*'.format(config))
+            sudo('chgrp root /etc/nginx/ssl/{0}.yourdomain.tld.*'.format(config))
+            sudo('chmod 644 /etc/nginx/ssl/{0}.yourdomain.tld.*'.format(config))
 
         sudo('/etc/init.d/nginx reload')
 
