@@ -1,7 +1,7 @@
 To set up a local development environment:
 
 1. Install all the required tools. This includes:
-    a. Python 3.6 (https://www.python.org/downloads/release/python-360/)
+    a. Python 3.6 (https://www.python.org/)
     b. Git (http://git-scm.com/downloads)
 2. Create a Virtualenv and populate it. In the root of the repo run:
     a. py -3.6 -m venv venv
