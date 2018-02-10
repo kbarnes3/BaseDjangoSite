@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
@@ -64,6 +65,14 @@ class UserCreationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('primary_email', 'given_name', 'surname')
+
+    def clean_password1(self):
+        # Check that the password meets the required complexity checks
+        password = self.cleaned_data.get("password1")
+        validation = validate_password(password)
+        if validation is not None:
+            raise validation
+        return password
 
     def clean_password2(self):
         # Check that the two password entries match
