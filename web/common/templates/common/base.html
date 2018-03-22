@@ -31,25 +31,27 @@
     <body>
 
         <!-- Fixed navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">NewDjangoSite</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="navbarSupportedContent">
-                {% if user.is_authenticated %}
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a class="navbar-link" href="/users/password-change">Change Password</a></li>
-                        <li><a class="navbar-link" href="/users/logout"><span class="hidden-xs">Logout</span><span class="visible-xs">Logout {{ user.get_short_name }}</span></a></li>
-                    </ul>
-                    <p class="navbar-text navbar-right hidden-xs">Hello {{ user.get_short_name }}!</p>
-                {% else %}
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/users/login">Login</a></li>
-                        <li><a href="/users/signup">Sign up</a></li>
-                    </ul>
-                {% endif %}
-            </div><!--/.nav-collapse -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">NewDjangoSite</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    {% if user.is_authenticated %}
+                        <div class="navbar-nav">
+                            <a class="nav-item nav-link" href="/users/password-change">Change Password</a>
+                            <a class="nav-item nav-link" href="/users/logout"><span class="hidden-xs">Logout</span><span class="visible-xs">Logout {{ user.get_short_name }}</span></a>
+                            <p class="nav-item hidden-xs">Hello {{ user.get_short_name }}!</p>
+                        </div>
+                    {% else %}
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/users/login">Login</a></li>
+                            <li><a href="/users/signup">Sign up</a></li>
+                        </ul>
+                    {% endif %}
+                </div><!--/.nav-collapse -->
+            </div>
         </nav>
 
         <div class="container main-container">
