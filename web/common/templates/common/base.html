@@ -41,16 +41,18 @@
                     {% if user.is_authenticated %}
                         <div class="navbar-nav">
                             <a class="nav-item nav-link" href="/users/password-change">Change Password</a>
-                            <a class="nav-item nav-link" href="/users/logout"><span class="hidden-xs">Logout</span><span class="visible-xs">Logout {{ user.get_short_name }}</span></a>
-                            <p class="nav-item hidden-xs">Hello {{ user.get_short_name }}!</p>
+                            <a class="nav-item nav-link" href="/users/logout"><span class="d-none d-lg-block">Logout</span><span class="d-lg-none">Logout {{ user.get_short_name }}</span></a>
                         </div>
                     {% else %}
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="/users/login">Login</a></li>
-                            <li><a href="/users/signup">Sign up</a></li>
-                        </ul>
+                        <div class="navbar-nav">
+                            <a class="nav-item nav-link" href="/users/login">Login</a>
+                            <a class="nav-item nav-link" href="/users/signup">Sign up</a>
+                        </div>
                     {% endif %}
                 </div><!--/.nav-collapse -->
+                {% if user.is_authenticated %}
+                    <span class="nav-text d-none d-lg-block">Hello {{ user.get_short_name }}!</span>
+                {% endif %}
             </div>
         </nav>
 
