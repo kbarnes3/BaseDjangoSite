@@ -43,7 +43,7 @@
                             <a class="nav-item nav-link" href="/">Another page</a>
                         </div>
                         <div class="navbar-nav flex-row ml-lg-auto d-block d-lg-flex">
-                            <a class="nav-item nav-link" href="/users/password-change">Change Password</a>
+                            <a class="nav-item nav-link" href="{% url 'password_change' %}">Change Password</a>
                             <a class="nav-item nav-link" href="{% url 'logout' %}"><span class="d-none d-lg-block">Logout</span><span class="d-lg-none">Logout {{ user.get_short_name }}</span></a>
                         </div>
                     {% else %}
