@@ -1,12 +1,12 @@
 from django.urls import include, path
-from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.views import LogoutView, PasswordChangeView, PasswordResetView
 
 from users.forms import EmailPasswordResetForm
-from users.views import create_user_account, logout_user
+from users.views import create_user_account
 
 
 urlpatterns = [
-    path('logout/', logout_user, name='logout_user'),
+    path('logout/', LogoutView.as_view(next_page='landing_page'), name='logout'),
     path('password-change/', PasswordChangeView.as_view(
         template_name='users/password_change.html',
         success_url='/')),

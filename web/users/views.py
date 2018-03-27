@@ -19,9 +19,3 @@ def create_user_account(request):
         form = UserCreationForm()
 
     return render(request, 'users/create_user_account.html', {'form': form})
-
-
-def logout_user(request):
-    logout(request)
-
-    return redirect('/')
