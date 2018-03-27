@@ -1,5 +1,5 @@
 from fabric.api import cd, run, sudo
-from fabricghdeploykeys.fabric_commands.permissions import set_permissions_directory
+from plush.fabric_commands.permissions import set_permissions_directory
 
 configurations = {
     'daily': {
@@ -93,6 +93,7 @@ def _reload_code(config, uwsgi_dir):
         sudo('systemctl enable uwsgi-app@newdjangosite-{0}.service'.format(config))
         sudo('systemctl start uwsgi-app@newdjangosite-{0}.socket'.format(config))
         sudo('touch /var/run/uwsgi/newdjangosite-{0}.reload'.format(config))
+        sudo('touch /var/run/uwsgi/newdjangosite-{0}.reload'.format(config))
 
 
 def _reload_web(config, nginx_dir, ssl):
@@ -113,7 +114,7 @@ def _run_tests(config, web_dir, virtualenv_python):
 
 
 def deploy_global_config(config):
-    from fabricghdeploykeys.fabric_commands.permissions import set_permissions_file
+    from plush.fabric_commands.permissions import set_permissions_file
     repo_dir = get_repo_dir(config)
     global_dir = '{0}/config/ubuntu-16.04/global'.format(repo_dir)
     shared_mem = '/etc/sysctl.d/30-postgresql-shm.conf'

@@ -8,7 +8,7 @@ REPO_FULL_NAME = 'GitHubUser/GitHubRepo'
 
 
 def setup_user(user):
-    from fabricghdeploykeys.fabric_commands import setup_user as setup_user_internal
+    from plush.fabric_commands import setup_user as setup_user_internal
 
     setup_user_internal(user, WEBADMIN_GROUP, add_sudo='yes')
 
@@ -23,7 +23,7 @@ def setup_user(user):
 
 
 def setup_server(setup_wins=''):
-    from fabricghdeploykeys.fabric_commands.permissions import make_directory
+    from plush.fabric_commands.permissions import make_directory
 
     base_packages = [
         'git',
@@ -110,7 +110,7 @@ def setup_deployment(config):
         uwsgi_service = '/etc/systemd/system/uwsgi-app@.service'
 
         if not exists(uwsgi_socket):
-            from fabricghdeploykeys.fabric_commands.permissions import set_permissions_file
+            from plush.fabric_commands.permissions import set_permissions_file
             sudo('cp uwsgi-app@.socket {0}'.format(uwsgi_socket))
             set_permissions_file(uwsgi_socket, 'root', 'root', '644')
 
@@ -126,15 +126,15 @@ def setup_deployment(config):
 
 
 def _setup_repo(repo_dir):
-    from fabricghdeploykeys.fabric_commands.permissions import make_directory
+    from plush.fabric_commands.permissions import make_directory
 
     make_directory(WEBADMIN_GROUP, repo_dir)
 
     if not exists('{0}/.git'.format(repo_dir)):
-        from fabricghdeploykeys.fabric_commands.git import clone
-        from fabricghdeploykeys.fabric_commands.ssh_key import create_key
-        from fabricghdeploykeys.oauth_flow import verify_access_token
-        from fabricghdeploykeys.repo_keys import add_repo_key
+        from plush.fabric_commands.git import clone
+        from plush.fabric_commands.ssh_key import create_key
+        from plush.oauth_flow import verify_access_token
+        from plush.repo_keys import add_repo_key
 
         if not verify_access_token():
             raise Exception('Unable to access GitHub account')
