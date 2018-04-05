@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOWED_HOSTS = []
 
 ADMINS = (
-    ('Kevin Barnes', 'kbarnes3@gmail.com'),
+    ('DjangoSiteOwner', 'djangositeemail@example.com'),
 )
 
 # Application definition

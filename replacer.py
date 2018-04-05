@@ -6,13 +6,15 @@ PLACEHOLDER_VARIABLE = 'newdjangosite'
 PLACEHOLDER_TITLE = 'NewDjangoSite'
 PLACEHOLDER_DOMAIN = 'yourdomain.tld'
 PLACEHOLDER_GITHUB_REPO = 'GitHubUser/GitHubRepo'
+PLACEHOLDER_OWNER = 'DjangoSiteOwner'
+PLACEHOLDER_EMAIL = 'djangositeemail@example.com'
 
 EXCLUDED_DIRECTORIES = ['.git', '.idea', 'venv']
 EXCLUDED_FILES = ['replacer.py']
 EXCLUDED_EXTENSIONS = ['.pyc']
 
 
-def replace(file_path, site_variable, site_title, site_domain, github_repo):
+def replace(file_path, site_variable, site_title, site_domain, github_repo, owner, email):
     modified = False
 
     with open(file_path, 'rb') as file_handle:
@@ -34,6 +36,14 @@ def replace(file_path, site_variable, site_title, site_domain, github_repo):
         contents = contents.replace(bytearray(PLACEHOLDER_GITHUB_REPO, 'utf-8'), bytearray(github_repo, 'utf-8'))
         modified = True
 
+    if bytearray(PLACEHOLDER_OWNER, 'utf-8') in contents:
+        contents = contents.replace(bytearray(PLACEHOLDER_OWNER, 'utf-8'), bytearray(owner, 'utf-8'))
+        modified = True
+
+    if bytearray(PLACEHOLDER_EMAIL, 'utf-8') in contents:
+        contents = contents.replace(bytearray(PLACEHOLDER_EMAIL, 'utf-8'), bytearray(email, 'utf-8'))
+        modified = True
+
     if modified:
         with open(file_path, 'wb') as file_handle:
             file_handle.write(contents)
@@ -42,7 +52,7 @@ def replace(file_path, site_variable, site_title, site_domain, github_repo):
         print('No changes to {0}'.format(file_path))
 
 
-def replace_in_files(site_variable, site_title, site_domain, github_repo):
+def replace_in_files(site_variable, site_title, site_domain, github_repo, owner, email):
     for root, dirs, files in walk('.'):
 
         # First, make sure we don't touch anything in excluded directories
@@ -77,7 +87,7 @@ def replace_in_files(site_variable, site_title, site_domain, github_repo):
                 full_path = join(root, name)
 
             # Find and replace anything in the contents of the file
-            replace(full_path, site_variable, site_title, site_domain, github_repo)
+            replace(full_path, site_variable, site_title, site_domain, github_repo, owner, email)
 
 
 if __name__ == "__main__":
@@ -101,5 +111,5 @@ if __name__ == "__main__":
 
     print('\nRenaming web/{0} to web/{1}'.format(PLACEHOLDER_VARIABLE, site_variable))
     rename('web/{0}'.format(PLACEHOLDER_VARIABLE), 'web/{0}'.format(site_variable))
-    replace_in_files(site_variable, site_title, site_domain, github_repo)
+    replace_in_files(site_variable, site_title, site_domain, github_repo, owner, email)
 
