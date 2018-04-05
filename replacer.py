@@ -81,17 +81,25 @@ def replace_in_files(site_variable, site_title, site_domain, github_repo):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(description='Injects your site''s name into the template to set up a new site')
-    parser.add_argument('site_variable',
-                        help='The name of the site in a form suitable for a variable. This should consist of only lowercase characters.')
-    parser.add_argument('site_title',
-                        help='The name of the site in your preferred human-readable form. This can contain mixed case, spaces, symbols, etc.')
-    parser.add_argument('site_domain',
-                        help='The domain for your site. This should omit "www."')
-    parser.add_argument('github_repo',
-                        help='The GitHub repo this site will be deployed from. It should be of the form GitHubUser/GitHubRepo')
-    args = parser.parse_args()
+    print('Enter the name of the site in a form suitable for a variable. This should consist of only lowercase characters (e.g., mydjangosite)')
+    site_variable = input('Site Variable: ')
 
-    print('Renaming web/{0} to web/{1}'.format(PLACEHOLDER_VARIABLE, args.site_variable))
-    rename('web/{0}'.format(PLACEHOLDER_VARIABLE), 'web/{0}'.format(args.site_variable))
-    replace_in_files(args.site_variable, args.site_title, args.site_domain, args.github_repo)
+    print('\nEnter the name of the site in your preferred human-readable form. This can contain mixed case, spaces, symbols, etc. (e.g., My Django Site)')
+    site_title = input('Site Title: ')
+    
+    print('\nEnter the domain for your site. This should omit "www." (e.g., example.com)')
+    site_domain = input('Site Domain: ')
+
+    print('\nEnter the GitHub repo this site will be deployed from. It should be of the form GitHubUser/GitHubRepo')
+    github_repo = input('GitHub repo: ')
+
+    print('\nEnter the name of the owner of this site. This name will appear in the copyright information for this site')
+    owner = input('Owner: ')
+
+    print('\nEnter the email address for the owner. Django will email failures to this address, but it won''t be visible on the site)')
+    email = input('Email: ')
+
+    print('\nRenaming web/{0} to web/{1}'.format(PLACEHOLDER_VARIABLE, site_variable))
+    rename('web/{0}'.format(PLACEHOLDER_VARIABLE), 'web/{0}'.format(site_variable))
+    replace_in_files(site_variable, site_title, site_domain, github_repo)
+
