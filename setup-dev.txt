@@ -5,7 +5,7 @@ To set up a local development environment:
     b. Git (http://git-scm.com/downloads)
 2. Create a Virtualenv and populate it. In the root of the repo run:
     a. py -3.6 -m venv venv
-    b. venv\Scripts\activate.bat
+    b. venv\Scripts\activate.bat or venv\Scripts\Activate.ps1
     c. pip install --requirement=requirements.txt
     d. pip install --requirement=dev-requirements.txt
 3. If needed, run 'python secret_key.py' from the root of the repo to generate a secret key and set the SECRET_KEY setting in web/newdjangosite/settings_base.py to be the output of the previous command

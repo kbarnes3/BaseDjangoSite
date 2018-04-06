@@ -3,11 +3,7 @@ To start a new site:
 1. Create an emtpy Git repo and copy the contents of this repo into it (excluding this file, README.md, and possibly LICENSE.TXT).
 2. Next replace all references with the placeholder site name with your site name. This can be done automatically:
     a. Ensure Python 3.6 is installed from https://www.python.org/downloads/release/python-360/.
-    b. In the root run 'py -3.6 replacer.py $variable$ "$title$" $domain$ "$github_repo$"'.
-        $variable$ should be only lower case characters
-        $title$ should be human readable and can contain spaces, symbols, and mixed case
-        $domain$ should be the domain without 'www', e.g. "example.org"
-        $github_repo$ should be the GitHub repo this site will be deployed from. It should be of the form GitHubUser/GitHubRepo
+    b. In the root run 'py -3.6 replacer.py'. This program will prompt you for various values such as your project name and email address and make appropriate substitutions.
     c. Delete replacer.py.
 3. Commit the all the files to Git.
 4. Follow the instructions in setup-dev.txt to set up a local development environment.
