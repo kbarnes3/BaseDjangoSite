@@ -93,7 +93,6 @@ def _reload_code(config, uwsgi_dir):
         sudo('systemctl enable uwsgi-app@newdjangosite-{0}.service'.format(config))
         sudo('systemctl start uwsgi-app@newdjangosite-{0}.socket'.format(config))
         sudo('touch /var/run/uwsgi/newdjangosite-{0}.reload'.format(config))
-        sudo('touch /var/run/uwsgi/newdjangosite-{0}.reload'.format(config))
 
 
 def _reload_web(config, nginx_dir, ssl):

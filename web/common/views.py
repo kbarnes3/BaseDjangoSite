@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
 
 def hello_world(request):

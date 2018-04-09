@@ -1,5 +1,5 @@
 from django.urls import include, path
-from django.contrib.auth.views import LogoutView, PasswordChangeView, PasswordResetView
+from django.contrib.auth.views import LogoutView, PasswordResetView
 
 from users.forms import EmailPasswordResetForm
 from users.views import create_user_account
