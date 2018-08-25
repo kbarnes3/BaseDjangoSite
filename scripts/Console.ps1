@@ -6,3 +6,5 @@ $venv = Join-Path $project_root "venv\scripts\Activate.ps1"
 if (-Not (Test-Path $venv)) {
     . $PSScriptRoot\Setup.ps1
 }
+
+. $PSScriptRoot\Ensure-Venv.ps1 | Out-Null

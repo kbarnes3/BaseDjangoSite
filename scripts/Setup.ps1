@@ -22,9 +22,9 @@ if (Test-Path $local_db) {
 Write-Warning "Creating venv in $venv"
 & py -3.6 -m venv $venv
 
-. $PSScriptRoot\Bootstrap.ps1
+. $PSScriptRoot\Bootstrap.ps1 -Verbose
 
-. $PSScriptRoot\Ensure-Venv.ps1
+. $PSScriptRoot\Ensure-Venv.ps1 | Out-Null
 
 Write-Warning "Creating local database"
 $manage = Join-Path $project_root "web\manage.py"
