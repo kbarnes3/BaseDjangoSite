@@ -27,10 +27,9 @@ Write-Warning "Creating venv in $venv"
 . $PSScriptRoot\Ensure-Venv.ps1 | Out-Null
 
 Write-Warning "Creating local database"
-$manage = Join-Path $project_root "web\manage.py"
-& python $manage migrate
+& $PSScriptRoot\Invoke-Manage.ps1 migrate
 
 Write-Warning "Creating super user"
-& python $manage createsuperuser
+& $PSScriptRoot\Invoke-Manage.ps1 createsuperuser
 
 deactivate
