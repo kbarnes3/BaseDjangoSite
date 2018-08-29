@@ -14,3 +14,12 @@ else {
 }
 
 . $PSScriptRoot\Ensure-Venv.ps1 | Out-Null
+
+# Register helper functions
+Set-Item function:global:Invoke-Manage {
+    . $PSScriptRoot\Invoke-Manage.ps1 $args
+} -Force
+
+Set-Item function:global:Run-Server {
+    . $PSScriptRoot\Invoke-Manage.ps1 runserver $args
+} -Force
