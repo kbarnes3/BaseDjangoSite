@@ -4,6 +4,9 @@ param(
 )
 
 $project_root = Split-Path $PSScriptRoot
+. $PSScriptRoot\Write-Status.ps1
+
+Write-Status "NewDjangoSite console"
 
 $venv = Join-Path $project_root "venv\scripts\Activate.ps1"
 if (Test-Path $venv) {
@@ -23,3 +26,5 @@ Set-Item function:global:Invoke-Manage {
 Set-Item function:global:Run-Server {
     . $PSScriptRoot\Invoke-Manage.ps1 runserver $args
 } -Force
+
+Write-Status "NewDjangoSite ready"
