@@ -23,8 +23,12 @@ Set-Item function:global:Invoke-Manage {
     . $PSScriptRoot\Invoke-Manage.ps1 $args
 } -Force
 
-Set-Item function:global:Run-Server {
-    . $PSScriptRoot\Invoke-Manage.ps1 runserver $args
+Set-Item function:global:Invoke-Fabric {
+    . $PSScriptRoot\Invoke-Fabric.ps1 $args
+} -Force
+
+Set-Item function:global:Start-Server {
+    Invoke-Manage runserver $args
 } -Force
 
 Write-Status "NewDjangoSite ready"
