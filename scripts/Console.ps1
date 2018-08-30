@@ -1,5 +1,6 @@
 # Launch a console for the project.
 param(
+    [switch]$Quick,
     [switch]$Verbose
 )
 
@@ -10,9 +11,14 @@ Write-Status "NewDjangoSite console"
 
 $venv = Join-Path $project_root "venv\scripts\Activate.ps1"
 if (Test-Path $venv) {
-    . $PSScriptRoot\Update.ps1 -Verbose:$Verbose
+    if (-Not($Quick)) {
+        . $PSScriptRoot\Update.ps1 -Verbose:$Verbose
+    }
 }
 else {
+    if ($Quick) {
+        Write-Warning "No virtual env detected, -Quick will be ignored"
+    }
     . $PSScriptRoot\Setup.ps1
 }
 
