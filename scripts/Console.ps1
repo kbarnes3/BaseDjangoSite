@@ -37,4 +37,9 @@ Set-Item function:global:Start-Server {
     Invoke-Manage runserver $args
 } -Force
 
+Set-Item function:global:Update-DevEnvironment {
+    param([switch]$Verbose)
+    . $PSScriptRoot\Update.ps1 -Verbose:$Verbose
+} -Force
+
 Write-Status "NewDjangoSite ready"
