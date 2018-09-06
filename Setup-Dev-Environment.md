@@ -25,3 +25,4 @@ After the initial setup
     Update-DevEnvironment: calls scripts\Update.ps1 (see below for more details)
 1. After pulling/merging/etc. it's a good idea to run Update-DevEnvironmnet or scripts\Update.ps1 to ensure any new or updated dependencies are setup correctly.
 1. When you are ready to push your changes to a test or production server, see Setup-Server-Environment.md
+1. If you want to reset your local repo back to a clean state, run scripts\Setup.ps1 -GitClean. Be warned that this will delete a lot of files, such as any untracked files and your local test database.

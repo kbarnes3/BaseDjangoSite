@@ -1,10 +1,17 @@
 # Set up project for the first time after , or set it back to the initial first unused state.
+param(
+    [switch]$GitClean
+)
 
 . $PSScriptRoot\Write-Status.ps1
 $project_root = Split-Path $PSScriptRoot
 
 if ($env:VIRTUAL_ENV) {
     deactivate
+}
+
+if ($GitClean) {
+    & git clean -df
 }
 
 # Remove local state if it exists
