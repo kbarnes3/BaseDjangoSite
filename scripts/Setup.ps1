@@ -11,6 +11,7 @@ if ($env:VIRTUAL_ENV) {
 }
 
 if ($GitClean) {
+    Write-Status "Running 'git clean -df'"
     & git clean -df
 }
 
