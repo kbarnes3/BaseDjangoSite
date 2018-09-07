@@ -26,15 +26,15 @@ else {
 
 # Register helper functions
 Set-Item function:global:Invoke-Manage {
-    . $PSScriptRoot\Invoke-Manage.ps1 $args
+    . $PSScriptRoot\Invoke-Manage.ps1 @args
 } -Force
 
 Set-Item function:global:Invoke-Fabric {
-    . $PSScriptRoot\Invoke-Fabric.ps1 $args
+    . $PSScriptRoot\Invoke-Fabric.ps1 @args
 } -Force
 
 Set-Item function:global:Start-Server {
-    Invoke-Manage runserver $args
+    Invoke-Manage runserver @args
 } -Force
 
 Set-Item function:global:Update-DevEnvironment {
