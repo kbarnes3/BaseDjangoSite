@@ -7,7 +7,7 @@ from .deploy import AllowedException, deploy, get_repo_dir, WEBADMIN_GROUP
 REPO_FULL_NAME = 'GitHubUser/GitHubRepo'
 
 
-def setup_user(user):
+def setup_user(user, no_sudo_passwd=''):
     from plush.fabric_commands import setup_user as setup_user_internal
 
     setup_user_internal(user, WEBADMIN_GROUP, add_sudo='yes')
