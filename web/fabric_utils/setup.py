@@ -18,6 +18,8 @@ def setup_user(user, no_sudo_passwd=''):
             sudo('rm {0}'.format(sudoers_file))
         sudo("echo '{0} ALL=(ALL:ALL) NOPASSWD:ALL' | sudo EDITOR='tee -a' visudo -f {1}".format(user, sudoers_file))
 
+    # TODO: Something like this: cat ~/.ssh/id_rsa.pub | ssh username@remote_host "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
     if not exists('/usr/bin/createuser'):
         _install_packages(['postgresql'])
 
