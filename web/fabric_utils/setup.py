@@ -12,14 +12,19 @@ def setup_user(user, no_sudo_passwd=''):
 
     setup_user_internal(user, WEBADMIN_GROUP, add_sudo='yes')
 
+    if no_sudo_passwd:
+        sudoers_file = '/etc/sudoers.d/{0}-plush'.format(user)
+        if exists(sudoers_file, True):
+            sudo('rm {0}'.format(sudoers_file))
+        sudo("echo '{0} ALL=(ALL:ALL) NOPASSWD:ALL' | sudo EDITOR='tee -a' visudo -f {1}".format(user, sudoers_file))
+
     if not exists('/usr/bin/createuser'):
         _install_packages(['postgresql'])
 
-    with settings(abort_exception=AllowedException):
-        try:
-            sudo('createuser -s {0}'.format(user), user='postgres')
-        except AllowedException:
-            pass
+    matching_user_count = sudo("psql postgres -tAc \"SELECT 1 FROM pg_roles WHERE rolname='{0}'\"".format(user),
+                               user='postgres')
+    if '1' not in matching_user_count:
+        sudo('createuser -s {0}'.format(user), user='postgres')
 
 
 def setup_server(setup_wins=''):

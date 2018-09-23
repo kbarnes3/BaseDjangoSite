@@ -18,9 +18,10 @@ Some steps need to be performed manually before Fabric can be used.
 ```sudo apt-get update```  
 ```sudo apt-get dist-upgrade```  
 ```sudo apt-get remove unattended-upgrades```  
+```sudo apt-get autoremove```  
 ```sudo reboot```
 1. After you log in again, make a note of your IP address. ```ifconfig``` will print the IP address if the welcome message does not.
-1. At this point, Fabric should be able to connect with a hostname of the form ```username@a.b.c.d``` where ```username``` is the username for the user set up by the Ubuntu installer and ```a.b.c.d``` is the IP address noted previously. If a DNS record exists that points to ```a.b.c.d```, that can be used as well. At this point, you'll need to log in with your password.
+1. At this point, Fabric should be able to connect with a hostname of the form ```username@a.b.c.d``` where ```username``` is the username for the user set up by the Ubuntu installer and ```a.b.c.d``` is the IP address noted previously. If a DNS record exists that points to ```a.b.c.d```, that can be used as well. At this point, you'll need to log in with your password. After the initial setup, it's recommended that you only connect using SSH public-key authentication, which can be setup below.
 
 Setup user account for deploying
 ------------------------
@@ -28,10 +29,10 @@ Setup user account for deploying
 These steps will prepare your user account to be used to successfully deploy and update a NewDjangoSite deployment to your server. These steps can be used to create a new user or modify an existing user.
 
 1. Make sure you run all the following commands in a PowerShell prompt set up by following Setup-Dev-Environment.md
-1. The Fabric command ```setup_user``` is used to configure a new or existing user account. It takes a series of required and optional parameters.  
+1. The Fabric command ```setup_user``` is used to configure a new or existing user account. It takes a series of required and optional parameters. Run one of the below commands to setup a user account.  
     1. The first parameter is ```$linux_user$```. ```$linux_user$``` is either an existing user account or the name of the user you want to create. This account will be prepped to deploy and update NewDjangoSite sites, which includes being granted sudo access. The simplest form of the ```setup_user``` command is ```fab setup_user:$linux_user$```.  
     1. The second parameter is ```no_sudo_passwd``` which indicates you don't want to be challenged with a password when running sudo logged in as ```$linux_user$```. This is recommended if you plan on logging in using a public/private key pair. If this parameter is provided, any value other than an empty string will be interpretted as true. This parameter defaults to '' if not provided. Specifying this parameter will resemble this:  
-    ```fab setup_user:$linux_user$,no_sudo_passwd=true```
-1. Run ```fab setup_user:$linux_user$``` where ```$linux_user$``` is either an existing user account or the name of the user you want to create. This account will be prepped to deploy and update NewDjangoSite sites, which includes being granted sudo access.
+    ```fab setup_user:$linux_user$,no_sudo_passwd=true```  
+    Note that PowerShell requires everything from "setup_user" onward to be in quotes due to the comma.
 1. When prompted by Fabric to enter a hostname, the username you provide must already exist and have sudo access. This may or may not be the same as the ```$linux_user$``` provided above.
 1. Repeat these steps for any additional users.
