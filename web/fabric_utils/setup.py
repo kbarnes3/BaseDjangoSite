@@ -1,13 +1,15 @@
 from importlib import import_module
+from fabric.api import env
 from fabric.api import cd, run, settings, sudo
 from fabric.contrib.files import exists
 from .deploy import AllowedException, deploy, get_repo_dir, WEBADMIN_GROUP
 
+env.use_ssh_config = True
 
 REPO_FULL_NAME = 'GitHubUser/GitHubRepo'
 
 
-def setup_user(user, no_sudo_passwd=''):
+def setup_user(user, no_sudo_passwd='', public_key_file=''):
     from plush.fabric_commands import setup_user as setup_user_internal
 
     setup_user_internal(user, WEBADMIN_GROUP, add_sudo='yes')
@@ -18,7 +20,14 @@ def setup_user(user, no_sudo_passwd=''):
             sudo('rm {0}'.format(sudoers_file))
         sudo("echo '{0} ALL=(ALL:ALL) NOPASSWD:ALL' | sudo EDITOR='tee -a' visudo -f {1}".format(user, sudoers_file))
 
-    # TODO: Something like this: cat ~/.ssh/id_rsa.pub | ssh username@remote_host "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat >> ~/.ssh/authorized_keys"
+    if public_key_file:
+        with open(public_key_file, 'r') as public_key:
+            public_key_contents = public_key.read()
+
+        sudo('mkdir -p ~/.ssh', user=user)
+        sudo('touch ~/.ssh/authorized_keys', user=user)
+        sudo('chmod -R go= ~/.ssh ', user=user)
+        sudo('echo "{0}" | tee -a ~/.ssh/authorized_keys'.format(public_key_contents), user=user)
 
     if not exists('/usr/bin/createuser'):
         _install_packages(['postgresql'])
