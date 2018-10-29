@@ -38,6 +38,8 @@ These steps will prepare your user account to be used to successfully deploy and
     ```fab "setup_user:$linux_user$,no_sudo_passwd=true,public_key_file=C:\Users\You\.ssh\id_rsa.pub"```  
     Note that PowerShell requires everything from "setup_user" onward to be in quotes due to the commas.
 1. When prompted by Fabric to enter a hostname, the username you provide must already exist and have sudo access. This may or may not be the same as the ```$linux_user$``` provided above.
+1. More public keys can be added with the command:  
+```fab "add_authorized_key:$linux_user,C:\Users\You\.ssh\id_rsa.pub"```
 1. Repeat these steps for any additional users. Note that if ```$linux_user$``` does not exist, it will be created with a password disabled. If public key authentication is not going to be used for this account, you'll need to log in and set a password manually.
 1. If public key authentication is going to be used exclusively for remote access, you can disable password based authentication by running:  
 ```fab disable_ssh_passwords```  

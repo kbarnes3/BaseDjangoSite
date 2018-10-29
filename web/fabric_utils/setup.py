@@ -1,7 +1,7 @@
 from importlib import import_module
 from fabric.api import env
 from fabric.api import cd, run, settings, sudo
-from fabric.contrib.files import exists
+from fabric.contrib.files import append, comment, exists
 from .deploy import AllowedException, deploy, get_repo_dir, WEBADMIN_GROUP
 
 env.use_ssh_config = True
@@ -35,6 +35,18 @@ def add_authorized_key(user, public_key_file):
         with open(public_key_file, 'r') as public_key:
             public_key_contents = public_key.read()
         plush.fabric_commands.add_authorized_key(user, public_key_contents)
+
+
+def disable_ssh_passwords():
+    sshd_config = '/etc/ssh/sshd_config'
+    comment(sshd_config, '^ *PasswordAuthentication', use_sudo=True)
+    append(sshd_config, 'PasswordAuthentication no', use_sudo=True)
+    print("========================================")
+    print("Password authentication disabled for SSH.")
+    print("Restart the SSH daemon by logging into the console and running:")
+    print("sudo service ssh restart")
+    print("Alternatively, reboot the server if console access isn't readily available.")
+    print("========================================")
 
 
 def setup_server(setup_wins=''):
