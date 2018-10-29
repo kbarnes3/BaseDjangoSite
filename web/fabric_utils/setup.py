@@ -10,24 +10,10 @@ REPO_FULL_NAME = 'GitHubUser/GitHubRepo'
 
 
 def setup_user(user, no_sudo_passwd='', public_key_file=''):
-    from plush.fabric_commands import setup_user as setup_user_internal
+    from plush.fabric_commands import prepare_user
 
-    setup_user_internal(user, WEBADMIN_GROUP, add_sudo='yes')
-
-    if no_sudo_passwd:
-        sudoers_file = '/etc/sudoers.d/{0}-plush'.format(user)
-        if exists(sudoers_file, True):
-            sudo('rm {0}'.format(sudoers_file))
-        sudo("echo '{0} ALL=(ALL:ALL) NOPASSWD:ALL' | sudo EDITOR='tee -a' visudo -f {1}".format(user, sudoers_file))
-
-    if public_key_file:
-        with open(public_key_file, 'r') as public_key:
-            public_key_contents = public_key.read()
-
-        sudo('mkdir -p ~/.ssh', user=user)
-        sudo('touch ~/.ssh/authorized_keys', user=user)
-        sudo('chmod -R go= ~/.ssh ', user=user)
-        sudo('echo "{0}" | tee -a ~/.ssh/authorized_keys'.format(public_key_contents), user=user)
+    messages = prepare_user(user, WEBADMIN_GROUP, add_sudo=True, no_sudo_passwd=bool(no_sudo_passwd))
+    add_authorized_key(user, public_key_file)
 
     if not exists('/usr/bin/createuser'):
         _install_packages(['postgresql'])
@@ -36,6 +22,19 @@ def setup_user(user, no_sudo_passwd='', public_key_file=''):
                                user='postgres')
     if '1' not in matching_user_count:
         sudo('createuser -s {0}'.format(user), user='postgres')
+
+    if messages:
+        print("========================================")
+        print(messages)
+        print("========================================")
+
+
+def add_authorized_key(user, public_key_file):
+    import plush.fabric_commands
+    if public_key_file:
+        with open(public_key_file, 'r') as public_key:
+            public_key_contents = public_key.read()
+        plush.fabric_commands.add_authorized_key(user, public_key_contents)
 
 
 def setup_server(setup_wins=''):
