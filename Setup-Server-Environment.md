@@ -44,3 +44,9 @@ These steps will prepare your user account to be used to successfully deploy and
 1. If public key authentication is going to be used exclusively for remote access, you can disable password based authentication by running:  
 ```fab disable_ssh_passwords```  
 and following the directions printed.
+
+Setup global server environment
+-------------------------------
+These steps will install system wide packages and make other global changes that will impact all deployments on this server. These steps only need to be run once.
+
+1. Run ```fab setup_server``` or ```fab "setup_server:setup_wins=True"```. This script will install a variety of packages with apt-get, make various directories, and properly secure these directories. Adding the ```setup_wins``` parameter will configure the server to broadcast its name via the WINS protocol. This lets you refer to the server by the value in ```/etc/hostname``` from a Windows computer on the same subnet. Consider adding ```setup_wins``` if this server is on the same subnet as Windows computers that will interact with it.

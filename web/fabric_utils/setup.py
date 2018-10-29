@@ -52,6 +52,9 @@ def disable_ssh_passwords():
 def setup_server(setup_wins=''):
     from plush.fabric_commands.permissions import make_directory
 
+    sudo('add-apt-repository universe')
+    sudo('apt-get update')
+
     base_packages = [
         'git',
         'python3-venv',
