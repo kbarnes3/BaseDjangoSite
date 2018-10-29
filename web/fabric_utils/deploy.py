@@ -146,9 +146,10 @@ def deploy_global_config(config):
     sudo('/etc/init.d/postgresql restart')
 
 
-def shutdown(config):
+def shutdown(config, branch=''):
     configuration = configurations[config]
-    branch = configuration['branch']
+    if not branch:
+        branch = configuration['branch']
     use_ssl = configuration['ssl']
 
     repo_dir = get_repo_dir(config)
