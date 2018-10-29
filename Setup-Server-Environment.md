@@ -50,3 +50,11 @@ Setup global server environment
 These steps will install system wide packages and make other global changes that will impact all deployments on this server. These steps only need to be run once.
 
 1. Run ```fab setup_server``` or ```fab "setup_server:setup_wins=True"```. This script will install a variety of packages with apt-get, make various directories, and properly secure these directories. Adding the ```setup_wins``` parameter will configure the server to broadcast its name via the WINS protocol. This lets you refer to the server by the value in ```/etc/hostname``` from a Windows computer on the same subnet. Consider adding ```setup_wins``` if this server is on the same subnet as Windows computers that will interact with it.
+
+Setup deployment
+----------------
+These steps will get a specific deployment of NewDjangoSite running on a server that's been setup using the above directions. Any server can run one or more of the available deployments (prod, staging, daily, dev). See the ```web/newdjangosite/settings*.py``` files for the differences between the deployments. These steps can be repeated once for each desired deployments.
+
+1. Consider updating the database username and password found in ```web/newdjangosite/settings_$deployment$.py``` file. If you update it, commit and push your changes before continuing. Note that the Fabric script won't work with passwords containing shell escape characters.
+1. Run ```auth``` and follow the prompts in the browser, logging into GitHub with an account that can set deploy keys on this repo.
+1. Run ```fab setup_deployment:$deployment$```

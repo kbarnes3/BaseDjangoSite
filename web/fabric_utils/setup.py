@@ -104,7 +104,7 @@ def _setup_wins():
     sudo('sed -i s/\'hosts:.*/hosts:          files dns wins/\' /etc/nsswitch.conf')
 
 
-def setup_deployment(config):
+def setup_deployment(config, branch=''):
     django_settings = import_module('newdjangosite.settings_{0}'.format(config))
     db_settings = django_settings.DATABASES['default']
     db_name = db_settings['NAME']
@@ -145,10 +145,11 @@ def setup_deployment(config):
             set_permissions_file(uwsgi_socket, 'root', 'root', '644')
 
         if not exists(uwsgi_service):
+            from plush.fabric_commands.permissions import set_permissions_file
             sudo('cp uwsgi-app@.service {0}'.format(uwsgi_service))
             set_permissions_file(uwsgi_service, 'root', 'root', '644')
 
-    deploy(config)
+    deploy(config, branch)
 
     if database_created:
         with cd(repo_dir):

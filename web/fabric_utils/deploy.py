@@ -32,9 +32,10 @@ def get_repo_dir(config):
     return '{0}/newdjangosite-{1}'.format(PYTHON_DIR, config)
 
 
-def deploy(config):
+def deploy(config, branch=''):
     configuration = configurations[config]
-    branch = configuration['branch']
+    if not branch:
+        branch = configuration['branch']
     use_ssl = configuration['ssl']
 
     repo_dir = get_repo_dir(config)
