@@ -134,7 +134,7 @@ def setup_deployment(config, branch=''):
         if not exists('venv'):
             run('python3 -m venv --system-site-packages venv')
 
-    global_dir = '{0}/config/ubuntu-16.04/global'.format(repo_dir)
+    global_dir = '{0}/config/ubuntu-18.04/global'.format(repo_dir)
     with cd(global_dir):
         uwsgi_socket = '/etc/systemd/system/uwsgi-app@.socket'
         uwsgi_service = '/etc/systemd/system/uwsgi-app@.service'
