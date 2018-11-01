@@ -67,3 +67,10 @@ Finishing up global server deployment
 The files in config/ubuntu-18.04/global can impact all the Django sites running on the server, so they aren't routinely deployed. After your first deployment, or after updating these files, they need to be explictly deployed. They can be deployed with:  
 ```fab deploy_global_config:$deployment$```  
 Note that no changes are made to ```$deployment$```, the files are just copied from that deployment at its current state. You may need to deploy to ```$deployment$``` to ensure recent updates to the global files are in the deployment's repo first. See the next section for details on deploying.
+
+Deploying new changes
+---------------------
+Once a server deployment is set up, only one command is generally needed to update it with the latest changes pushed to GitHub:  
+```fab deploy:$deployment$```  
+This command replies on configuration parameters defined at the top ```web/newdjangosite/fabric_utils/deploy.py``` to define the behaviors that should be different on a per-deployment basis. Settings include the default branch and whether or not SSL related files are expected to exist.  
+This command also takes an optional ```branch=``` parameter to override the default branch.
