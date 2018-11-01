@@ -130,9 +130,6 @@ def deploy_global_config(config):
     uwsgi_service = '/etc/systemd/system/uwsgi-app@.service'
 
     with cd(global_dir):
-        sudo('git fetch origin')
-        sudo('git reset --hard origin/master')
-
         sudo('cp nginx.conf {0}'.format(nginx_conf))
         set_permissions_file(nginx_conf, 'root', 'root', '644')
 

@@ -58,3 +58,12 @@ These steps will get a specific deployment of NewDjangoSite running on a server 
 1. Consider updating the database username and password found in ```web/newdjangosite/settings_$deployment$.py``` file. If you update it, commit and push your changes before continuing. Note that the Fabric script won't work with passwords containing shell escape characters.
 1. Run ```auth``` and follow the prompts in the browser, logging into GitHub with an account that can set deploy keys on this repo.
 1. Run ```fab setup_deployment:$deployment$```
+1. When prompted for a passphrase after seeing "Generating public/private rsa key pair", an empty passphrase is recommended
+1. When prompted for a primary email and subsequent fields, enter the information for the Django superuser to create
+1. The OAuth token stored by ```auth``` is no longer needed unless you intend to setup more deployments. It isn't used to updated a deployment in the steady state. Optionally, you can remove the token by running ```auth delete```.
+
+Finishing up global server deployment
+-------------------------------------
+The files in config/ubuntu-18.04/global can impact all the Django sites running on the server, so they aren't routinely deployed. After your first deployment, or after updating these files, they need to be explictly deployed. They can be deployed with:  
+```fab deploy_global_config:$deployment$```  
+Note that no changes are made to ```$deployment$```, the files are just copied from that deployment at its current state. You may need to deploy to ```$deployment$``` to ensure recent updates to the global files are in the deployment's repo first. See the next section for details on deploying.
