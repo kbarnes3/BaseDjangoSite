@@ -2,7 +2,7 @@ from importlib import import_module
 from fabric.api import env
 from fabric.api import cd, run, settings, sudo
 from fabric.contrib.files import append, comment, exists
-from .deploy import AllowedException, deploy, get_repo_dir, WEBADMIN_GROUP
+from .deploy import AllowedException, checkout_branch, deploy, get_repo_dir, WEBADMIN_GROUP
 
 env.use_ssh_config = True
 
@@ -129,6 +129,7 @@ def setup_deployment(config, branch=''):
     run('psql -d postgres -c \"ALTER ROLE {0} WITH ENCRYPTED PASSWORD \'{1}\';\"'.format(db_user, db_password))
 
     _setup_repo(repo_dir)
+    checkout_branch(repo_dir, config, branch)
 
     with cd(repo_dir):
         if not exists('venv'):

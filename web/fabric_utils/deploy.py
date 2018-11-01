@@ -113,6 +113,14 @@ def _run_tests(config, web_dir, virtualenv_python):
         run('{0} manage_{1}.py test'.format(virtualenv_python, config))
 
 
+def checkout_branch(repo_dir, config, branch=None):
+    if not branch:
+        configuration = configurations[config]
+        branch = configuration['branch']
+
+    _update_source(repo_dir, branch)
+
+
 def deploy_global_config(config):
     from plush.fabric_commands.permissions import set_permissions_file
     repo_dir = get_repo_dir(config)
