@@ -14,10 +14,10 @@ To start a new Django site based on this project, do the following steps
 1. Create an empty Git repo and copy the contents of this repo into it. Alternatively, clone this repo to a new directory and then delete the .git folder.
 1. Remove or update the following files to reflect your project: README.md and LICENSE.TXT
 1. Ensure the latest release of Python 3.6 is installed on your computer
-1. Run ```py -3.6 secret_key.py``` and copy the output into the SECRET_KEY property in ```web\newdjangosite\settings_base.py```. Be sure to uncomment the property.
 1. Run the "replacer.py" script to personalize the BaseDjangoSite template files. The script should be run with: ```py -3.6 replacer.py```
 1. The script will prompt you for values such as your project domain, URL, and email address. The script will then edit and rename files based on the provided values.
 1. Delete the replace.py file
 1. Commit all the remaining files to Git.
-1. Follow the instructions in Setup-Dev-Environment.md to set up a local development environment
+1. Follow the instructions in Setup-Dev-Environment.md to set up a local development environment. When the instructions tell you to run the ```Console.ps1``` script, it's expected to fail at the "Creating local database" step.
+1. Run ```py -3.6 secret_key.py``` and copy the output into the SECRET_KEY property in ```web\newdjangosite\settings_base.py```. Be sure to uncomment the property.
 1. Follow the instructions in Setup-Server-Environment.md to set up a server deployment.
