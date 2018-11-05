@@ -19,6 +19,6 @@ To start a new Django site based on this project, do the following steps
 1. Delete the replace.py file
 1. Commit all the remaining files to Git.
 1. From PowerShell, run ```scripts\Bootstrap.ps1 -Verbose``` followed by ```scripts\Ensure-Venv.ps1```
-1. Run ```python secret_key.py``` and copy the output into the SECRET_KEY property in ```web\newdjangosite\settings_base.py```. Be sure to uncomment the property.
+1. Run ```python secret_key.py``` and copy the output into the SECRET_KEY property in ```web\$project_name$\settings_base.py```. Be sure to uncomment the property.
 1. Follow the instructions in Setup-Dev-Environment.md to set up a local development environment.
 1. Follow the instructions in Setup-Server-Environment.md to set up a server deployment.
