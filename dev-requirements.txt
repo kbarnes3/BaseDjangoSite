@@ -1,2 +1,2 @@
 Fabric3==1.14.post1
-plush-fabric==0.2.0
+plush-fabric==0.4.1

@@ -32,14 +32,15 @@ def get_repo_dir(config):
     return '{0}/newdjangosite-{1}'.format(PYTHON_DIR, config)
 
 
-def deploy(config):
+def deploy(config, branch=''):
     configuration = configurations[config]
-    branch = configuration['branch']
+    if not branch:
+        branch = configuration['branch']
     use_ssl = configuration['ssl']
 
     repo_dir = get_repo_dir(config)
     web_dir = '{0}/web'.format(repo_dir)
-    config_dir = '{0}/config/ubuntu-16.04'.format(repo_dir)
+    config_dir = '{0}/config/ubuntu-18.04'.format(repo_dir)
     daily_scripts_dir = '{0}/cron.daily'.format(config_dir)
     uwsgi_dir = '{0}/uwsgi'.format(config_dir)
     nginx_dir = '{0}/nginx'.format(config_dir)
@@ -112,28 +113,25 @@ def _run_tests(config, web_dir, virtualenv_python):
         run('{0} manage_{1}.py test'.format(virtualenv_python, config))
 
 
+def checkout_branch(repo_dir, config, branch=None):
+    if not branch:
+        configuration = configurations[config]
+        branch = configuration['branch']
+
+    _update_source(repo_dir, branch)
+
+
 def deploy_global_config(config):
     from plush.fabric_commands.permissions import set_permissions_file
     repo_dir = get_repo_dir(config)
-    global_dir = '{0}/config/ubuntu-16.04/global'.format(repo_dir)
-    shared_mem = '/etc/sysctl.d/30-postgresql-shm.conf'
+    global_dir = '{0}/config/ubuntu-18.04/global'.format(repo_dir)
     nginx_conf = '/etc/nginx/nginx.conf'
-    postgres_conf = '/etc/postgresql/9.5/main/postgresql.conf'
     uwsgi_socket = '/etc/systemd/system/uwsgi-app@.socket'
     uwsgi_service = '/etc/systemd/system/uwsgi-app@.service'
 
     with cd(global_dir):
-        sudo('git fetch origin')
-        sudo('git reset --hard origin/master')
-
-        sudo('cp 30-postgresql-shm.conf {0}'.format(shared_mem))
-        set_permissions_file(shared_mem, 'root', 'root', '644')
-
         sudo('cp nginx.conf {0}'.format(nginx_conf))
         set_permissions_file(nginx_conf, 'root', 'root', '644')
-
-        sudo('cp postgresql.conf {0}'.format(postgres_conf))
-        set_permissions_file(postgres_conf, 'postgres', 'postgres', '644')
 
         sudo('cp uwsgi-app@.socket {0}'.format(uwsgi_socket))
         set_permissions_file(uwsgi_socket, 'root', 'root', '644')
@@ -142,16 +140,16 @@ def deploy_global_config(config):
         set_permissions_file(uwsgi_service, 'root', 'root', '644')
 
     sudo('/etc/init.d/nginx restart')
-    sudo('/etc/init.d/postgresql restart')
 
 
-def shutdown(config):
+def shutdown(config, branch=''):
     configuration = configurations[config]
-    branch = configuration['branch']
+    if not branch:
+        branch = configuration['branch']
     use_ssl = configuration['ssl']
 
     repo_dir = get_repo_dir(config)
-    nginx_dir = '{0}/config/ubuntu-16.04/nginx/shutdown'.format(repo_dir)
+    nginx_dir = '{0}/config/ubuntu-18.04/nginx/shutdown'.format(repo_dir)
 
     _update_source(repo_dir, branch)
     _reload_web(config, nginx_dir, use_ssl)

@@ -1,29 +1,59 @@
 from importlib import import_module
+from fabric.api import env
 from fabric.api import cd, run, settings, sudo
-from fabric.contrib.files import exists
-from .deploy import AllowedException, deploy, get_repo_dir, WEBADMIN_GROUP
+from fabric.contrib.files import append, comment, exists
+from .deploy import AllowedException, checkout_branch, deploy, get_repo_dir, WEBADMIN_GROUP
 
+env.use_ssh_config = True
 
 REPO_FULL_NAME = 'GitHubUser/GitHubRepo'
 
 
-def setup_user(user):
-    from plush.fabric_commands import setup_user as setup_user_internal
+def setup_user(user, no_sudo_passwd='', public_key_file=''):
+    from plush.fabric_commands import prepare_user
 
-    setup_user_internal(user, WEBADMIN_GROUP, add_sudo='yes')
+    messages = prepare_user(user, WEBADMIN_GROUP, add_sudo=True, no_sudo_passwd=bool(no_sudo_passwd))
+    add_authorized_key(user, public_key_file)
 
     if not exists('/usr/bin/createuser'):
         _install_packages(['postgresql'])
 
-    with settings(abort_exception=AllowedException):
-        try:
-            sudo('createuser -s {0}'.format(user), user='postgres')
-        except AllowedException:
-            pass
+    matching_user_count = sudo("psql postgres -tAc \"SELECT 1 FROM pg_roles WHERE rolname='{0}'\"".format(user),
+                               user='postgres')
+    if '1' not in matching_user_count:
+        sudo('createuser -s {0}'.format(user), user='postgres')
+
+    if messages:
+        print("========================================")
+        print(messages)
+        print("========================================")
+
+
+def add_authorized_key(user, public_key_file):
+    import plush.fabric_commands
+    if public_key_file:
+        with open(public_key_file, 'r') as public_key:
+            public_key_contents = public_key.read()
+        plush.fabric_commands.add_authorized_key(user, public_key_contents)
+
+
+def disable_ssh_passwords():
+    sshd_config = '/etc/ssh/sshd_config'
+    comment(sshd_config, '^ *PasswordAuthentication', use_sudo=True)
+    append(sshd_config, 'PasswordAuthentication no', use_sudo=True)
+    print("========================================")
+    print("Password authentication disabled for SSH.")
+    print("Restart the SSH daemon by logging into the console and running:")
+    print("sudo service ssh restart")
+    print("Alternatively, reboot the server if console access isn't readily available.")
+    print("========================================")
 
 
 def setup_server(setup_wins=''):
     from plush.fabric_commands.permissions import make_directory
+
+    sudo('add-apt-repository universe')
+    sudo('apt-get update')
 
     base_packages = [
         'git',
@@ -74,7 +104,7 @@ def _setup_wins():
     sudo('sed -i s/\'hosts:.*/hosts:          files dns wins/\' /etc/nsswitch.conf')
 
 
-def setup_deployment(config):
+def setup_deployment(config, branch=''):
     django_settings = import_module('newdjangosite.settings_{0}'.format(config))
     db_settings = django_settings.DATABASES['default']
     db_name = db_settings['NAME']
@@ -99,12 +129,13 @@ def setup_deployment(config):
     run('psql -d postgres -c \"ALTER ROLE {0} WITH ENCRYPTED PASSWORD \'{1}\';\"'.format(db_user, db_password))
 
     _setup_repo(repo_dir)
+    checkout_branch(repo_dir, config, branch)
 
     with cd(repo_dir):
         if not exists('venv'):
             run('python3 -m venv --system-site-packages venv')
 
-    global_dir = '{0}/config/ubuntu-16.04/global'.format(repo_dir)
+    global_dir = '{0}/config/ubuntu-18.04/global'.format(repo_dir)
     with cd(global_dir):
         uwsgi_socket = '/etc/systemd/system/uwsgi-app@.socket'
         uwsgi_service = '/etc/systemd/system/uwsgi-app@.service'
@@ -115,10 +146,11 @@ def setup_deployment(config):
             set_permissions_file(uwsgi_socket, 'root', 'root', '644')
 
         if not exists(uwsgi_service):
+            from plush.fabric_commands.permissions import set_permissions_file
             sudo('cp uwsgi-app@.service {0}'.format(uwsgi_service))
             set_permissions_file(uwsgi_service, 'root', 'root', '644')
 
-    deploy(config)
+    deploy(config, branch)
 
     if database_created:
         with cd(repo_dir):
