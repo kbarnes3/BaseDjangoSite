@@ -28,9 +28,6 @@ if (Test-Path $local_db) {
     Remove-Item -Path $local_db
 }
 
-Write-Status "Creating venv in $venv"
-& py -3.6 -m venv $venv
-
 . $PSScriptRoot\Bootstrap.ps1 -Verbose
 
 . $PSScriptRoot\Ensure-Venv.ps1 | Out-Null

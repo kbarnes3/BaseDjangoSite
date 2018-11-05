@@ -13,9 +13,16 @@ else {
 }
 
 $project_root = Split-Path $PSScriptRoot
-$already_activated = . $PSScriptRoot\Ensure-Venv.ps1
 
 Push-Location $project_root
+
+$venv = Join-Path $project_root "venv"
+if (-Not (Test-Path $venv)) {
+    Write-Status "Creating venv in $venv"
+    & py -3.6 -m venv $venv
+}
+
+$already_activated = . $PSScriptRoot\Ensure-Venv.ps1
 
 Write-Status "Updating pip"
 & python -m pip install --upgrade pip $quiet
