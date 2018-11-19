@@ -102,7 +102,10 @@ def _setup_wins():
 
     _install_packages(wins_packages)
     sudo('sed -i s/\'hosts:.*/hosts:          files dns wins/\' /etc/nsswitch.conf')
-
+    resolved_config = '/etc/systemd/resolved.conf'
+    comment(resolved_config, '^ *Domains', use_sudo=True)
+    append(resolved_config, 'Domains=localdomain', use_sudo=True)
+    sudo('service systemd-resolved restart')
 
 def setup_deployment(config, branch=''):
     django_settings = import_module('newdjangosite.settings_{0}'.format(config))
