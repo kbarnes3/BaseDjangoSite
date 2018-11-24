@@ -31,7 +31,7 @@ These steps will prepare your user account to be used to successfully deploy and
 1. Make sure you run all the following commands in a PowerShell prompt set up by following Setup-Dev-Environment.md
 1. The Fabric command ```setup_user``` is used to configure a new or existing user account. It takes a series of required and optional parameters. Run one of the below commands to setup a user account.  
     1. The first parameter is ```$linux_user$```. ```$linux_user$``` is either an existing user account or the name of the user you want to create. This account will be prepped to deploy and update NewDjangoSite sites, which includes being granted sudo access. The simplest form of the ```setup_user``` command is ```fab setup_user:$linux_user$```.  
-    1. The second parameter is ```no_sudo_passwd``` which indicates you don't want to be challenged with a password when running sudo logged in as ```$linux_user$```. This is recommended if you plan on logging in using a public/private key pair. If this parameter is provided, any value other than an empty string will be interpretted as true. This parameter defaults to '' if not provided. Specifying this parameter will resemble this:  
+    1. The second parameter is ```no_sudo_passwd``` which indicates you don't want to be challenged with a password when running sudo logged in as ```$linux_user$```. This is recommended if you plan on logging in using a public/private key pair. If this parameter is provided, any value other than an empty string will be interpreted as true. This parameter defaults to '' if not provided. Specifying this parameter will resemble this:  
     ```fab "setup_user:$linux_user$,no_sudo_passwd=true"```  
     Note that PowerShell requires everything from "setup_user" onward to be in quotes due to the comma.
     1. The third parameter is ```public_key_file```. This parameter specifies a file on disk that contains a public key that should be used for authentication of SSH instead of the user password. This parameter should probably be used in conjunction with ```no_sudo_passwd``` if you don't want to have to specify a password as soon as Fabric runs a command with sudo. Specifying this parameter will resemble this:  
@@ -72,5 +72,5 @@ Deploying new changes
 ---------------------
 Once a server deployment is set up, only one command is generally needed to update it with the latest changes pushed to GitHub:  
 ```fab deploy:$deployment$```  
-This command replies on configuration parameters defined at the top ```web/newdjangosite/fabric_utils/deploy.py``` to define the behaviors that should be different on a per-deployment basis. Settings include the default branch and whether or not SSL related files are expected to exist.  
+This command replies on configuration parameters defined at the top ```web/fabric_utils/deploy.py``` to define the behaviors that should be different on a per-deployment basis. Settings include the default branch and whether or not SSL related files are expected to exist.  
 This command also takes an optional ```branch=``` parameter to override the default branch.
